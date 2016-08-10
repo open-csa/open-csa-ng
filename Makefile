@@ -4,7 +4,7 @@ CSA_ENVIRONMENT ?= production
 
 .PHONY: deps
 
-all: venv deps
+all: venv deps db-reset
 
 deps: venv
 	. venv/bin/activate && python -m pip install -r requirements-$(CSA_ENVIRONMENT).txt
