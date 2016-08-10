@@ -1,6 +1,5 @@
 language: python
 python:
-  - "3.4"
   - "3.5"
 install: CSA_ENVIRONMENT=test make
 script: make pep8
