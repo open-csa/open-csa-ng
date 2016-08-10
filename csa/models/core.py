@@ -10,7 +10,12 @@ class ProductCategory(models.Model):
     class Meta:
         verbose_name_plural = "product categories"
 
-    parent = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True)
+    parent = models.ForeignKey(
+        'self',
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True)
+
     name = CSACharField(unique=True)
     description = CSACharField(blank=True)
 

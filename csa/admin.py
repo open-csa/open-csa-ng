@@ -42,6 +42,7 @@ class Producer(ModelAdmin):
         'profile__phone_number',
         'profile__user__email')
 
+
 @admin.register(csa.models.user.Consumer)
 class Consumer(ModelAdmin):
     inlines = [UserProfileInline]

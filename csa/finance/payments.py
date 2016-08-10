@@ -28,8 +28,14 @@ def get_user_balance(user):
 
 def user_deposit_by_hand(user, amount):
     company_user = get_company_user()
-    user_deposits_acc = get_user_account(user, Account.TYPE_LIABILITY_USER_BALANCE)
-    company_asset_account = get_user_account(company_user, Account.TYPE_ASSET_BANK_ACCOUNT)
+    user_deposits_acc = get_user_account(
+        user,
+        Account.TYPE_LIABILITY_USER_BALANCE)
+
+    company_asset_account = get_user_account(
+        company_user,
+        Account.TYPE_ASSET_BANK_ACCOUNT)
+
     transaction = Transaction.objects.create(
         type=Transaction.TYPE_CONSUMER_PURCHASE,
         description='{username}'.format(username=user.username),
@@ -47,7 +53,6 @@ def user_deposit_by_hand(user, amount):
             amount=amount,
             transaction=transaction)
     ]
-
 
     payment = Payment.objects.create(
         type=Payment.TYPE_DEPOSIT,

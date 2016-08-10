@@ -34,8 +34,7 @@ urlpatterns = [
         RegistrationView.as_view(
             form_class=csa.forms.access.RegistrationForm
         ),
-        name='user-register',
-    ),
+        name='user-register'),
     url(r'^user/', include('registration.backends.hmac.urls')),
 
     url(r'^$', csa.views.index, name='index'),
