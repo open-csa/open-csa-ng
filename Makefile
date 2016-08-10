@@ -20,7 +20,8 @@ db-reset:
 	. venv/bin/activate && ./bin/db-setup.py --drop --init --test-data
 
 pep8:
-	. venv/bin/activate && pep8 ${SOURCE_FOLDERS}
+	. venv/bin/activate && \
+		pep8 --exclude=csa/migrations,csa/settings.py ${SOURCE_FOLDERS}
 
 autopep8:
 	. venv/bin/activate && \
