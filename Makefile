@@ -28,4 +28,4 @@ autopep8:
 		    xargs autopep8 -j 0 --in-place
 
 clean:
-	rm -rf venv
+	rm -rf venv csa.egg-info
