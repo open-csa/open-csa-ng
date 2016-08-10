@@ -1,14 +1,14 @@
 SOURCE_FOLDERS=csa
 FIXTURES=users product-categories product-measure-units
+CSA_ENVIRONMENT ?= production
 
 .PHONY: deps
 
 all: venv deps
 
 deps: venv
-	. venv/bin/activate && python -m pip install wheel
-	. venv/bin/activate && python -m pip wheel -r requirements.txt
-	. venv/bin/activate && python -m pip install -r requirements.txt
+	. venv/bin/activate && python -m pip install -r requirements-$(CSA_ENVIRONMENT).txt
+	. venv/bin/activate && python -m pip install -e .
 
 venv:
 	virtualenv -p python3 venv --prompt '(csa)'
