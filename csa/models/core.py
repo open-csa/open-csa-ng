@@ -5,6 +5,14 @@ from csa.models.utils import CSACharField
 # TODO: split this module into actual pieces
 
 
+class DeliveryLocation(models.Model):
+    name = CSACharField(unique=True)
+    address = CSACharField()
+
+    def __str__(self):
+        return self.name
+
+
 class ProductCategory(models.Model):
     # set proper plural name
     class Meta:
@@ -54,6 +62,7 @@ class ProductStock(models.Model):
     price = models.PositiveIntegerField()
     # extra description for specific product from producer
     description = models.TextField()
+    supported_delivery_locations = models.ManyToManyField(DeliveryLocation)
 
 
 class CartAndOrderCommon(models.Model):

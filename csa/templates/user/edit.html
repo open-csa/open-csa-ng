@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% load bootstrap3 %}
+{% load tags %}
+
+{% block content %}
+<h2>Επεξεργασία Χρήστη</h2>
+
+<form class="form form-horizontal" action="{% url 'user-edit' %}" method="post">
+  {% csrf_token %}
+  {% for form in forms %}
+    {% bootstrap_form form layout='horizontal' %}
+  {% endfor %}
+  {% buttons submit='Αλλαγή Στοιχείων' %}{% endbuttons %}
+</form>
+{% endblock %}

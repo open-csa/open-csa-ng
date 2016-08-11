@@ -5,8 +5,10 @@ import os
 import django
 os.environ['DJANGO_SETTINGS_MODULE'] = 'csa.settings'
 django.setup()
-from csa.models.user import User, UserProfile
-from csa.models.core import ProductCategory, ProductMeasureUnit, Product, ProductStock
+from csa.models.user import User, UserProfile, Consumer
+from csa.models.core import (
+    ProductCategory, ProductMeasureUnit, Product, ProductStock,
+    DeliveryLocation)
 
 
 def test_data():
@@ -21,6 +23,10 @@ def test_data():
     ProductCategory.objects.create(
         name='Ντομάτες',
         parent=ProductCategory.objects.get(name='Λαχανικά'))
+
+    da = DeliveryLocation.objects.create(
+        name='Da',
+        address='Ντεντιδάκιδων 15')
 
     password = 'p4ssw0rd'
     admin = User.objects.create_superuser(
@@ -38,7 +44,10 @@ def test_data():
         last_name='Σουπερμαρκετάκης')
     UserProfile.objects.create(
         user=consumer,
-        phone_number='+306976823542')
+        phone_number='+306976823542',
+        consumer=Consumer.objects.create(
+            preferred_delivery_location=da
+        ))
 
     producer = User.objects.create_user(
         username='producer',
@@ -62,14 +71,14 @@ def test_data():
         unit=unit_kilo)
     aggouri.categories.add(category_laxanika)
 
-    ProductStock.objects.create(
+    aggouri_vasw = ProductStock.objects.create(
         product=aggouri,
         producer=producer,
         variety='Κλωσσούδι',
         description='Τα λεγόμενα αγγουράκια της Βάσως',
         quantity=10,
         price=150)
-
+    aggouri_vasw.supported_delivery_locations.add(da)
 
 
 parser = ArgumentParser(description='CSA database setup tool')

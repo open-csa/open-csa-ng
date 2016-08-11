@@ -38,6 +38,7 @@
 	    {{ user.get_full_name }} <span class="caret"></span>
 	  </a>
 	  <ul class="dropdown-menu">
+	    <li><a href="{% url 'user-edit' %}">Επεξεργασία Προφίλ</a></li>
 	    {% if user.is_superuser %}
 	    <li><a href="{% url 'admin:index' %}">Διαχείρηση</a></li>
 	    {% endif %}

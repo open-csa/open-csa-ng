@@ -12,14 +12,18 @@ class Producer(models.Model):
 
 
 class Consumer(models.Model):
-    pass
+    preferred_delivery_location = models.OneToOneField('DeliveryLocation')
 
     def __str__(self):
         return self.profile.user.username
 
 
 class UserProfile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(
+        User,
+        on_delete=models.CASCADE,
+        related_name='profile')
+
     phone_number = PhoneNumberField()
 
     producer = models.OneToOneField(
