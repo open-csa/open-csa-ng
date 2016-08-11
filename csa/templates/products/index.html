@@ -37,5 +37,8 @@
   </tbody>
 </table>
 <hr>
+{% empty %}
+{# TODO: find a way to break this to multiple lines #}
+{% bootstrap_alert "Δεν υπάρχουν διαθέσιμα προϊόντα για αυτό το σημείο διάθεσης" alert_type='warning' dismissable=false %}
 {% endfor %}
 {% endblock %}
