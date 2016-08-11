@@ -4,6 +4,7 @@
 
 {% block content %}
 <div class="row">
+{% if cart.items.all %}
 <table class="table table-striped">
   <thead>
     <tr>
@@ -27,5 +28,8 @@
     {% endfor %}
   </tbody>
 </table>
+{% else %}
+{% bootstrap_alert "Το καλάθι σας είναι αδειανό" dismissable=false %}
+{% endif %}
 </div>
 {% endblock %}
