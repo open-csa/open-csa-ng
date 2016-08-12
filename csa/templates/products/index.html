@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load bootstrap3 %}
+{% load widget_tweaks %}
 {% load tags %}
 
 {% block content %}
@@ -8,7 +9,7 @@
 {% for product in products %}
 <h3>{{ product.name }}</h3>
 <p>{{ product.description }}</p>
-<table class="table table-striped">
+<table class="table table-striped table-hover table-bordered">
   <thead>
     <tr>
       <th>Παραγωγός</th>
@@ -25,11 +26,14 @@
       <td>{{ stock.description }}</td>
       <td>{{ stock.price|currency }}</td>
       <td>
-	<form method="post" action="{% url 'cart-add' %}">
+	<form class="cart-add-product-form form-inline" method="post" action="{% url 'cart-add' %}">
 	  {% csrf_token %}
-	  {{ stock.cart_add_form.quantity }}
+	  {% render_field stock.cart_add_form.quantity class+="form-control" %}
 	  {{ stock.cart_add_form.stock_id }}
-	  <input type="submit" value="καλάθι">
+	  <button class="btn btn-primary">
+	    <span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span>
+	    Προσθήκη
+	  </button>
 	</form>
       </td>
     </tr>

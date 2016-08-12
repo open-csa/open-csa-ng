@@ -5,7 +5,8 @@
 {% block content %}
 <div class="row">
 {% if cart.items.all %}
-<table class="table table-striped">
+  {% bootstrap_alert "Η παραγγελία σας θα οριστικοποιηθεί αυτόματα στις ..." dismissable=false %}
+<table class="table table-striped table-bordered table-hover">
   <thead>
     <tr>
       <th>Προιόν</th>

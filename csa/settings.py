@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     # third party
     'bootstrap3',
     'related_admin',
+    'widget_tweaks',
 
     # our own
     'csa'
@@ -128,6 +129,9 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.9/howto/static-files/
 
 STATIC_URL = '/static/'
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static')
+]
 
 AUTH_PROFILE_MODULE = 'csa.models.UserProfile'
 # how long to let user activate his account

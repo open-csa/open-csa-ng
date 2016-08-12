@@ -3,6 +3,7 @@ django-bootstrap3
 django-registration
 django-phonenumber-field
 django-related-admin
+django-widget-tweaks
 
 # for fixtures
 pyyaml
