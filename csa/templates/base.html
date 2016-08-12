@@ -23,7 +23,12 @@
         <li class="{% active 'index' %}"><a href="{% url 'index' %}">Αρχική</a></li>
         {% if user.is_authenticated %}
 	<li class="{% active 'products-index' %}"><a href="{% url 'products-index' %}">Προιόντα</a></li>
-	<li><a href="{% url 'cart-index' %}">Παραγγελία της εβδομάδας</a></li>
+	<li>
+	  <a href="{% url 'cart-index' %}">
+	    <span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span>
+	    Παραγγελία της εβδομάδας
+	  </a>
+	</li>
 	{% endif %}
       </ul>
       <ul class="nav navbar-nav navbar-right">
