@@ -1,5 +1,4 @@
 SOURCE_FOLDERS=csa
-FIXTURES=users product-categories product-measure-units
 CSA_ENVIRONMENT ?= production
 
 .PHONY: deps
