@@ -41,5 +41,6 @@ urlpatterns = [
     url(r'^$', csa.views.index, name='index'),
     url(r'^products/$', csa.views.products.index, name='products-index'),
     url(r'^user/cart/$', csa.views.cart.index, name='cart-index'),
-    url(r'^user/cart/add', csa.views.cart.add, name='cart-add')
+    url(r'^user/cart/add', csa.views.cart.add, name='cart-add'),
+    url(r'^user/cart/clear', csa.views.cart.clear, name='cart-clear')
 ]
