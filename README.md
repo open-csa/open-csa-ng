@@ -1,16 +1,25 @@
 
-You will need python3 to run the application.
+## Dependencies ##
+
+* `python3`
+* `sqlite3` (temporarily, until we get a dedicated db)
 
 ## How to install ##
 
-Depending on the kind of installation you're looking for, you might need to
-setup the `CSA_ENVIRONMENT` variable. For local development you should do:
+First you need to clone the repository.
+
+Then to setup the application, run the following command:
 
 ```
 $ CSA_ENVIRONMENT=development make
 ```
 
-This will:
+Depending on the kind of installation you're after, you need to adjust the
+`CSA_ENVIRONMENT` variable accordingly. (one of `production`, `development`,
+`test`). The difference is in the dependencies that are installed, since some
+dependencies are needed only for specific environments.
+
+Running `make` will:
 
 1. Create a virtual environment under `venv`.
 2. Install dependencies (including dev and test dependencies).
