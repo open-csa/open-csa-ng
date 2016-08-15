@@ -14,7 +14,9 @@ from csa.models.core import (
 def test_data():
     unit_kilo = ProductMeasureUnit.objects.create(name='κιλό')
     unit_matso = ProductMeasureUnit.objects.create(name='μάτσο')
+    unit_bazaki = ProductMeasureUnit.objects.create(name='βαζάκι')
     category_laxanika = ProductCategory.objects.create(name='Λαχανικά')
+    category_marmelada = ProductCategory.objects.create(name='Μαρμελάδα')
     ProductCategory.objects.bulk_create([
         ProductCategory(name='Φρούτα'),
         ProductCategory(name='Μεταποιημένα')
@@ -76,10 +78,34 @@ def test_data():
         producer=producer,
         variety='Κλωσσούδι',
         description='Τα λεγόμενα αγγουράκια της Βάσως',
-        quantity=10,
+        is_available = True,
+        is_stockable = False,
+        quantity=0,
         price=150)
     aggouri_vasw.supported_delivery_locations.add(da)
 
+
+    marmelada = Product.objects.create(
+        name='Μαρμελάδα',
+        description='Η μαρμελάδα... τι να πρωτογράψει κανείς; Αυτό το αρχαίο γλυκό '
+                    'πασάλημα ψωμιού έχει κλέψει τις καρδιές και τους στοματικούς μας '
+                    'κάλυκες εδώ και χιλιάδες χρόνια. Ακόμα και αυτή τη στιγμή ανακαλύπτονται '
+                    'σε ανασκαφές αρχαίων τάφων βαζάκια διαφόρων ειδών μαρμαλάδες. '
+                    'Πέρα από την επάλυψη σε ζεστές φέτες ψωμιού το θεσπέσιο αυτό γλύκισμα '
+                    'χρησιμοποιείται στη παρασκευή του αγαπημένου σε όλους γλυκό πάστα φλώρα!',
+        unit=unit_bazaki)
+    marmelada.categories.add(category_marmelada)
+
+    marmelada_vasw = ProductStock.objects.create(
+        product=marmelada,
+        producer=producer,
+        variety='Φράουλα',
+        description='Τόσο γλυκιά που θα σας πέσουνε τα δόντια',
+        is_available=True,
+        is_stockable=True,
+        quantity=8,
+        price=300)
+    marmelada_vasw.supported_delivery_locations.add(da)
 
 parser = ArgumentParser(description='CSA database setup tool')
 parser.add_argument('--drop', action='store_true', help='drop tables')
