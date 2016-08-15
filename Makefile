@@ -28,6 +28,8 @@ test:
 
 # drop existing tables, creates new ones, and insert test data
 db-reset:
+	# TODO: don't do this when we release 1.0!
+	rm -rf csa/migrations
 	. venv/bin/activate && ./bin/db-setup.py --drop --init --test-data
 
 pep8:
