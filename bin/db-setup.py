@@ -95,7 +95,6 @@ if args.drop:
 
 if args.init:
     for cmd in [
-            './manage.py makemigrations --no-input',
             './manage.py makemigrations csa --no-input',
             './manage.py migrate --no-input'
     ]:
