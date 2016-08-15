@@ -12,7 +12,7 @@ class Producer(models.Model):
 
 
 class Consumer(models.Model):
-    preferred_delivery_location = models.OneToOneField('DeliveryLocation')
+    preferred_delivery_location = models.ForeignKey('DeliveryLocation')
 
     def __str__(self):
         return self.profile.user.username
