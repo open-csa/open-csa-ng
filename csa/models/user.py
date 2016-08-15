@@ -44,11 +44,24 @@ class UserProfile(models.Model):
         return self.user.username
 
 
+# TODO: put this in a better place
 def user_registered_callback(sender, user, request, **kwargs):
-    profile = UserProfile(user=user)
-    for attr in ['first_name', 'last_name', 'phone_number']:
-        setattr(profile, attr, request.POST[attr])
+    # fix this hack that avoids cirqular deps
+    from csa.models.core import DeliveryLocation
+    for attr in ['first_name', 'last_name']:
+        setattr(user, attr, request.POST[attr])
 
+    user.save()
+
+    # set user profile
+    profile = UserProfile(user=user)
+    profile.phone_number = request.POST['phone_number']
+    preferred_delivery_location = DeliveryLocation.objects.get(
+        pk=request.POST['preferred_delivery_location'])
+
+    consumer = Consumer.objects.create(
+        preferred_delivery_location=preferred_delivery_location)
+    profile.consumer = consumer
     profile.save()
 
 user_registered.connect(user_registered_callback)
