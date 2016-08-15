@@ -5,5 +5,6 @@ django-phonenumber-field
 django-related-admin
 django-widget-tweaks
 
-# for fixtures
-pyyaml
+# for graph_models
+# TODO: put this in -dev when we figure out how to split settings file
+django-extensions

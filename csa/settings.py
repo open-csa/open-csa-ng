@@ -46,7 +46,11 @@ INSTALLED_APPS = [
     'widget_tweaks',
 
     # our own
-    'csa'
+    'csa',
+
+    # development apps
+    # TODO: separate settings by environment
+    'django_extensions'
 ]
 
 MIDDLEWARE_CLASSES = [
