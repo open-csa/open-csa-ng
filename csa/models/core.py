@@ -56,7 +56,7 @@ class ProductStock(models.Model):
         related_name='stocks',
         on_delete=models.CASCADE)
 
-    producer = models.OneToOneField(User, on_delete=models.CASCADE)
+    producer = models.ForeignKey(User, on_delete=models.CASCADE)
     variety = CSACharField()
     price = models.PositiveIntegerField()
     # availability and stock related variables
