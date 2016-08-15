@@ -17,13 +17,16 @@ def index(request):
 @login_required
 def add(request):
     stock_id = int(request.POST['stock_id'])
+    quantity = float(request.POST['quantity'])
     stock = models.core.ProductStock.objects.get(pk=stock_id)
     cart = utils.get_user_cart(request.user.id)
     item, created = cart.items.get_or_create(
         product_stock=stock,
-        defaults={"quantity": 1})
+        defaults={"quantity": quantity})
+    # if the specific cart item was already present in
+    # the cart, then just update the quantity
     if not created:
-        item.quantity = F('quantity') + 1
+        item.quantity = F('quantity') + quantity
         item.save()
 
     return redirect('products-index')
