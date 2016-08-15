@@ -3,6 +3,4 @@ from django.contrib.auth.forms import AuthenticationForm
 
 
 def index(request):
-    return render(request, 'index.html', {
-        'login_form': AuthenticationForm()
-    })
+    return render(request, 'index.html')
