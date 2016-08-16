@@ -56,10 +56,14 @@ class ProductStock(models.Model):
         related_name='stocks',
         on_delete=models.CASCADE)
 
-    producer = models.OneToOneField(User, on_delete=models.CASCADE)
+    producer = models.ForeignKey(User, on_delete=models.CASCADE)
     variety = CSACharField()
-    quantity = models.PositiveIntegerField()
     price = models.PositiveIntegerField()
+    # availability and stock related variables
+    # default case, this item is available but not stockable
+    is_available = models.BooleanField(default=True)
+    is_stockable = models.BooleanField(default=False)
+    quantity = models.PositiveIntegerField(default=0)
     # extra description for specific product from producer
     description = models.TextField()
     supported_delivery_locations = models.ManyToManyField(DeliveryLocation)
