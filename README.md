@@ -33,3 +33,7 @@ To run the application for development, do:
 ```
 $ ./manage.py runserver
 ```
+
+## Other ##
+
+See folder `docs/` for some documentation and guidelines.
