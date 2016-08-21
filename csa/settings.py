@@ -160,6 +160,8 @@ BOOTSTRAP3 = {
     'css_url': '/static/css/lib/bootstrap.min.css'
 }
 
+ATOMIC_REQUESTS = True
+
 # csa-specific
 CSA_DELIVERY_WEEKDAY = 4
 CSA_DELIVERY_TIME = 5
