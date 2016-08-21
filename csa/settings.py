@@ -151,5 +151,7 @@ LOGIN_URL = 'auth_login'
 
 # TODO: serve this as static
 BOOTSTRAP3 = {
-    'css_url': 'https://bootswatch.com/flatly/bootstrap.min.css'
+    'css_url': '/static/css/lib/bootstrap.min.css'
+}
+
 }
