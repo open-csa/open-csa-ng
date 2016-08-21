@@ -24,6 +24,7 @@ import csa.views.admin.user
 import csa.views.products
 import csa.views.cart
 import csa.views.user
+import csa.views.orders
 
 
 urlpatterns = [
@@ -42,5 +43,10 @@ urlpatterns = [
     url(r'^products/$', csa.views.products.index, name='products-index'),
     url(r'^user/cart/$', csa.views.cart.index, name='cart-index'),
     url(r'^user/cart/add', csa.views.cart.add, name='cart-add'),
-    url(r'^user/cart/clear', csa.views.cart.clear, name='cart-clear')
+    url(r'^user/cart/clear', csa.views.cart.clear, name='cart-clear'),
+    url(r'^user/cart/checkout', csa.views.cart.checkout, name='cart-checkout'),
+    url(r'^user/orders/(?P<order_id>\d+)',
+        csa.views.orders.read,
+        name='orders-read'),
+    url(r'^user/orders', csa.views.orders.list, name='orders-list')
 ]

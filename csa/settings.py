@@ -11,6 +11,10 @@ https://docs.djangoproject.com/en/1.9/ref/settings/
 """
 
 import os
+import djcelery
+from celery.schedules import crontab
+
+djcelery.setup_loader()
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -44,6 +48,8 @@ INSTALLED_APPS = [
     'bootstrap3',
     'related_admin',
     'widget_tweaks',
+    'kombu.transport.django',
+    'djcelery',
 
     # our own
     'csa',
@@ -154,4 +160,18 @@ BOOTSTRAP3 = {
     'css_url': '/static/css/lib/bootstrap.min.css'
 }
 
+# csa-specific
+CSA_DELIVERY_WEEKDAY = 4
+CSA_DELIVERY_TIME = 5
+
+BROKER_URL = 'django://'
+# CELERYBEAT_SCHEDULER = 'djcelery.schedulers.DatabaseScheduler'
+CELERY_RESULT_BACKEND = 'djcelery.backends.database:DatabaseBackend'
+CELERY_ACCEPT_CONTENT = ['pickle']
+
+CELERYBEAT_SCHEDULE = {
+    'ensure-order-periods': {
+        'task': 'tasks.ensure_order_periods',
+        'schedule': crontab(minute='*/5')
+    }
 }

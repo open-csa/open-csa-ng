@@ -3,9 +3,8 @@ from django.contrib.auth.admin import UserAdmin
 from django.shortcuts import redirect
 from django import forms
 from related_admin import RelatedFieldAdmin as ModelAdmin
-from csa.models.user import User, UserProfile
 from csa.finance.payments import get_user_balance
-import csa.models
+import csa.models as m
 
 
 admin.site.site_header = 'Διαχείρηση CSA'
@@ -14,27 +13,27 @@ admin.site.site_title = 'Διαχeίρηση CSA'
 
 
 class UserProfileInline(admin.StackedInline):
-    model = UserProfile
+    model = m.user.UserProfile
 
 
 class UserProfileAdmin(UserAdmin):
     inlines = [UserProfileInline]
 
-admin.site.unregister(User)
-admin.site.register(User, UserProfileAdmin)
+admin.site.unregister(m.user.User)
+admin.site.register(m.user.User, UserProfileAdmin)
 
 
-@admin.register(csa.models.core.Product)
+@admin.register(m.core.Product)
 class ProductAdmin(ModelAdmin):
     list_display = ('name', 'description', 'unit')
 
 
-@admin.register(csa.models.core.ProductStock)
+@admin.register(m.core.ProductStock)
 class ProductStockAdmin(ModelAdmin):
     list_display = ('product', 'producer', 'quantity', 'price')
 
 
-@admin.register(csa.models.user.Producer)
+@admin.register(m.user.Producer)
 class Producer(ModelAdmin):
     inlines = [UserProfileInline]
     list_display = (
@@ -43,7 +42,7 @@ class Producer(ModelAdmin):
         'profile__user__email')
 
 
-@admin.register(csa.models.user.Consumer)
+@admin.register(m.user.Consumer)
 class Consumer(ModelAdmin):
     inlines = [UserProfileInline]
     actions = ['deposit_by_hand']
@@ -61,3 +60,12 @@ class Consumer(ModelAdmin):
 
     def balance(self, consumer):
         return get_user_balance(consumer.profile.user)
+
+
+# register simple models
+for model in [
+        m.core.OrderPeriod,
+        m.core.DeliveryLocation,
+        m.core.Order
+]:
+    admin.site.register(model)

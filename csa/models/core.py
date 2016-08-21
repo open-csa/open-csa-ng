@@ -9,6 +9,15 @@ class DeliveryLocation(models.Model):
     name = CSACharField(unique=True)
     address = CSACharField()
 
+    # by extension only weekly deliveries are available
+    # zero index weekday
+    delivery_weekday = models.IntegerField()
+    delivery_time = models.TimeField()
+    # expressed in seconds
+    delivery_duration = models.IntegerField()
+    orders_deadline_weekday = models.IntegerField()
+    orders_deadline_time = models.TimeField()
+
     def __str__(self):
         return self.name
 
@@ -69,6 +78,33 @@ class ProductStock(models.Model):
     supported_delivery_locations = models.ManyToManyField(DeliveryLocation)
 
 
+class OrderPeriod(models.Model):
+    class Meta:
+        unique_together = ('delivery_location', 'starts_at')
+
+    STATUS_PENDING = 1
+    STATUS_NO_MORE_ORDERS = 2
+    STATUS_FINALIZED = 3
+    STATUS_CANCELED = 4
+    STATUSES = (
+        (STATUS_PENDING, 'Pending'),
+        (STATUS_NO_MORE_ORDERS, 'No more orders'),
+        (STATUS_FINALIZED, 'Finalized'),
+        (STATUS_CANCELED, 'Canceled')
+    )
+
+    starts_at = models.DateTimeField()
+    ends_at = models.DateTimeField()
+    delivery_location = models.ForeignKey(DeliveryLocation)
+    status = models.IntegerField(choices=STATUSES)
+
+    def __str__(self):
+        return 'starts_at=%s, ends_at=%s, status=%s' % (
+            self.starts_at,
+            self.ends_at,
+            self.status)
+
+
 class CartAndOrderCommon(models.Model):
     class Meta:
         abstract = True
@@ -77,6 +113,9 @@ class CartAndOrderCommon(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    def total_price(self):
+        return sum(item.total_price() for item in self.items.all())
+
 
 class Cart(CartAndOrderCommon):
     user = models.OneToOneField(User)
@@ -84,6 +123,7 @@ class Cart(CartAndOrderCommon):
 
 class Order(CartAndOrderCommon):
     user = models.ForeignKey(User)
+    order_period = models.ForeignKey(OrderPeriod)
 
 
 class CartAndOrderItem(models.Model):
@@ -95,6 +135,9 @@ class CartAndOrderItem(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    def total_price(self):
+        return self.quantity * self.product_stock.price
+
 
 class CartItem(CartAndOrderItem):
     class Meta:
@@ -102,9 +145,6 @@ class CartItem(CartAndOrderItem):
         unique_together = (('product_stock', 'cart'),)
 
     cart = models.ForeignKey(Cart, related_name='items')
-
-    def total_price(self):
-        return self.quantity * self.product_stock.price
 
 
 class OrderItem(CartAndOrderItem):
@@ -115,3 +155,7 @@ class OrderItem(CartAndOrderItem):
     # TODO: product or product stock? crutial logic decision
     # TODO: copy product item details here. this is permanent order
     order = models.ForeignKey(Order, related_name='items')
+
+    # this is filled later when the administrator describes the fulfillment
+    # result
+    quantity_fulfilled = models.FloatField(null=True)
