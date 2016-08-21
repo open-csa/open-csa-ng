@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/1.9/ref/settings/
 """
 
 import os
+import sys
 import djcelery
 from celery.schedules import crontab
 
@@ -22,12 +23,6 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.9/howto/deployment/checklist/
-
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'q_4b3b3nwm*$eu9l()w&@og2(o$*06c(rfvv!)$(5vm#ec2-lq'
-
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
 
 ALLOWED_HOSTS = []
 
@@ -52,11 +47,7 @@ INSTALLED_APPS = [
     'djcelery',
 
     # our own
-    'csa',
-
-    # development apps
-    # TODO: separate settings by environment
-    'django_extensions'
+    'csa'
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -90,9 +81,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'csa.wsgi.application'
 
-
-# Database
-# https://docs.djangoproject.com/en/1.9/ref/settings/#databases
 
 DATABASES = {
     'default': {
@@ -147,9 +135,6 @@ AUTH_PROFILE_MODULE = 'csa.models.UserProfile'
 # how long to let user activate his account
 ACCOUNT_ACTIVATION_DAYS = 7
 
-if DEBUG:
-    EMAIL_BACKEND = 'django.core.mail.backends.dummy.EmailBackend'
-
 PHONENUMBER_DEFAULT_REGION = 'GR'
 
 # named-url provided by django_registration
@@ -177,3 +162,31 @@ CELERYBEAT_SCHEDULE = {
         'schedule': crontab(minute='*/5')
     }
 }
+
+csa_env = os.getenv('CSA_ENVIRONMENT')
+if csa_env is None:
+    print(
+        'Error: CSA_ENVIRONMENT environmental variable not set. '
+        'Needs to be one of production, development, test')
+    sys.exit()
+
+if csa_env == 'production':
+    # production specific
+    # let's be explicit about this one
+    DEBUG = False
+elif csa_env == 'development':
+    # development specific
+    pass
+elif csa_env == 'test':
+    # test specific
+    pass
+else:
+    raise ValueError(
+        '"{}" not a valid CSA_ENVIRONMENT value'.format(csa_env))
+
+# development or test specific settings
+if csa_env in ('development', 'test'):
+    INSTALLED_APPS.append('django_extensions')
+    EMAIL_BACKEND = 'django.core.mail.backends.dummy.EmailBackend'
+    SECRET_KEY = 'q_4b3b3nwm*$eu9l()w&@og2(o$*06c(rfvv!)$(5vm#ec2-lq'
+    DEBUG = True

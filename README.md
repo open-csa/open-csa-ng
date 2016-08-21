@@ -31,7 +31,7 @@ Running `make` will:
 To run the application for development, do:
 
 ```
-$ ./manage.py runserver
+$ CSA_ENVIRONMENT=development make run-dev
 ```
 
 ## Other ##

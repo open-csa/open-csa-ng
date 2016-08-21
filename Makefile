@@ -26,6 +26,9 @@ venv:
 test:
 	. venv/bin/activate && python -m unittest -v ${TEST_ARGS}
 
+run-dev:
+	. venv/bin/activate && ./manage.py runserver
+
 # drop existing tables, creates new ones, and insert test data
 db-reset:
 	# TODO: don't do this when we release 1.0!
