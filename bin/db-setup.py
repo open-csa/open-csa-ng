@@ -5,6 +5,8 @@ import os
 import django
 os.environ['DJANGO_SETTINGS_MODULE'] = 'csa.settings'
 django.setup()
+# TODO: don't import every module individually because this is madness, do
+# something like from csa import models as m and use that
 from csa.models.user import User, UserProfile, Consumer
 from csa.models.core import (
     ProductCategory, ProductMeasureUnit, Product, ProductStock,
@@ -28,7 +30,12 @@ def test_data():
 
     da = DeliveryLocation.objects.create(
         name='Da',
-        address='Ντεντιδάκιδων 15')
+        address='Ντεντιδάκιδων 15',
+        delivery_weekday=2,
+        delivery_time='17:00',
+        delivery_duration=5400,  # 1.5 hours
+        orders_deadline_weekday=0,
+        orders_deadline_time='18:00')
 
     password = 'p4ssw0rd'
     admin = User.objects.create_superuser(
