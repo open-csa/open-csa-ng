@@ -142,7 +142,9 @@ LOGIN_URL = 'auth_login'
 
 # TODO: serve this as static
 BOOTSTRAP3 = {
-    'css_url': '/static/css/lib/bootstrap.min.css'
+    'css_url': '/static/css/lib/bootstrap.min.css',
+    'jquery_url': '/static/js/lib/jquery.min.js',
+    'javascript_url': '/static/js/lib/bootstrap.min.js'
 }
 
 ATOMIC_REQUESTS = True
