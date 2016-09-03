@@ -15,6 +15,34 @@ import sys
 import djcelery
 from celery.schedules import crontab
 
+csa_env = os.getenv('CSA_ENVIRONMENT')
+if csa_env is None:
+    print(
+        'Error: CSA_ENVIRONMENT environmental variable not set. '
+        'Needs to be one of production, development, test')
+    sys.exit()
+
+if csa_env == 'production':
+    # production specific
+    # let's be explicit about this one
+    DEBUG = False
+elif csa_env == 'development':
+    # development specific
+    pass
+elif csa_env == 'test':
+    # test specific
+    pass
+else:
+    raise ValueError(
+        '"{}" not a valid CSA_ENVIRONMENT value'.format(csa_env))
+
+# development or test specific settings
+if csa_env in ('development', 'test'):
+    EMAIL_BACKEND = 'django.core.mail.backends.dummy.EmailBackend'
+    SECRET_KEY = 'q_4b3b3nwm*$eu9l()w&@og2(o$*06c(rfvv!)$(5vm#ec2-lq'
+    DEBUG = True
+
+
 djcelery.setup_loader()
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -49,6 +77,10 @@ INSTALLED_APPS = [
     # our own
     'csa'
 ]
+
+if csa_env in ('development', 'test'):
+    INSTALLED_APPS.append('django_extensions')
+
 
 MIDDLEWARE_CLASSES = [
     'django.middleware.security.SecurityMiddleware',
@@ -127,7 +159,9 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.9/howto/static-files/
 
+STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
 STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static')
 ]
@@ -165,31 +199,3 @@ CELERYBEAT_SCHEDULE = {
         'schedule': crontab(minute='*/5')
     }
 }
-
-csa_env = os.getenv('CSA_ENVIRONMENT')
-if csa_env is None:
-    print(
-        'Error: CSA_ENVIRONMENT environmental variable not set. '
-        'Needs to be one of production, development, test')
-    sys.exit()
-
-if csa_env == 'production':
-    # production specific
-    # let's be explicit about this one
-    DEBUG = False
-elif csa_env == 'development':
-    # development specific
-    pass
-elif csa_env == 'test':
-    # test specific
-    pass
-else:
-    raise ValueError(
-        '"{}" not a valid CSA_ENVIRONMENT value'.format(csa_env))
-
-# development or test specific settings
-if csa_env in ('development', 'test'):
-    INSTALLED_APPS.append('django_extensions')
-    EMAIL_BACKEND = 'django.core.mail.backends.dummy.EmailBackend'
-    SECRET_KEY = 'q_4b3b3nwm*$eu9l()w&@og2(o$*06c(rfvv!)$(5vm#ec2-lq'
-    DEBUG = True
