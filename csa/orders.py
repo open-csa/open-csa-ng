@@ -2,8 +2,8 @@
 from dateutil.relativedelta import relativedelta
 from collections import namedtuple
 from csa import models as m
-from csa import utils
-from csa import exceptions
+from csa import utils, exceptions
+from csa.finance import transactions
 
 OrderPeriodSpan = namedtuple('OrderPeriodSpan', ['starts_at', 'ends_at'])
 
@@ -86,7 +86,9 @@ class OrdersManager:
 
         return dt.replace(
             hour=time.hour,
-            minute=time.minute)
+            minute=time.minute,
+            second=time.second,
+            microsecond=time.microsecond)
 
     @classmethod
     def check_no_more_orders(cls, order_period):
@@ -117,6 +119,57 @@ class OrdersManager:
                     'status': m.core.OrderPeriod.STATUS_CANCELED
                 })
             tmp_date = next_week
+
+    @classmethod
+    def set_order_items_fulfillment(cls, order_period_id, data):
+        # data is list of tuples (order_item_id, quantity_fulfilled)
+        for order_item_id, quantity_fulfilled in data:
+            order_item = (
+                m.core.OrderItem.objects
+                .select_for_update()
+                .select_related('order__user')
+                .get(id=order_item_id))
+
+            if order_item.quantity_fulfilled:
+                paid_quantity = order_item.quantity_fulfilled
+            else:
+                paid_quantity = order_item.quantity
+
+            order_item.quantity_fulfilled = quantity_fulfilled
+            order_item.save()
+
+            diff_quantity = quantity_fulfilled - paid_quantity
+            if diff_quantity != 0:
+                transactions.order_item_fulfillment_changed(
+                    order_item,
+                    diff_quantity)
+
+        # see if order_period needs to have status set to FINALIZED
+        unfulfilled_items = cls.get_unfulfilled_order_items(order_period_id)
+        if not unfulfilled_items:
+            (m.core.OrderPeriod.objects
+             .filter(id=order_period_id)
+             .update(status=m.core.OrderPeriod.STATUS_FINALIZED))
+
+        # return whether the order period has been finalized
+        return not unfulfilled_items
+
+    @classmethod
+    def get_order_period(cls, order_period_id):
+        return m.core.OrderPeriod.objects.get(id=order_period_id)
+
+    @classmethod
+    def get_unfulfilled_order_items(cls, order_period_id):
+        return (
+            m.core.OrderItem.objects
+            .select_related('order')
+            .select_related('product_stock')
+            .select_related('product_stock__producer')
+            .select_related('product_stock__product')
+            .filter(order__order_period_id=order_period_id)
+            .filter(quantity_fulfilled__isnull=True)
+            .all()
+        )
 
     # TODO: this isn't used
     # @classmethod
@@ -177,6 +230,9 @@ class OrdersManager:
                 product_stock=item.product_stock,
                 quantity=item.quantity,
                 order=order)
+
+        # create products purchase transaction
+        transactions.products_purchase(order)
 
         # now empty cart
         m.core.CartItem.objects.filter(cart=cart).delete()

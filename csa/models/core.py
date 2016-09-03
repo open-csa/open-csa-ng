@@ -77,6 +77,9 @@ class ProductStock(models.Model):
     description = models.TextField()
     supported_delivery_locations = models.ManyToManyField(DeliveryLocation)
 
+    def __str__(self):
+        return 'ProductStock(id={id})'.format(id=self.id)
+
 
 class OrderPeriod(models.Model):
     class Meta:
@@ -99,10 +102,11 @@ class OrderPeriod(models.Model):
     status = models.IntegerField(choices=STATUSES)
 
     def __str__(self):
-        return 'starts_at=%s, ends_at=%s, status=%s' % (
-            self.starts_at,
-            self.ends_at,
-            self.status)
+        # probably time is not so relevant
+        return '{start}—{end}—{status}'.format(
+            start=self.starts_at.date(),
+            end=self.ends_at.date(),
+            status=self.get_status_display())
 
 
 class CartAndOrderCommon(models.Model):
@@ -124,6 +128,9 @@ class Cart(CartAndOrderCommon):
 class Order(CartAndOrderCommon):
     user = models.ForeignKey(User)
     order_period = models.ForeignKey(OrderPeriod)
+
+    def __str__(self):
+        return 'Order(id={id})'.format(id=self.id)
 
 
 class CartAndOrderItem(models.Model):

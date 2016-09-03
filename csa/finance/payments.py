@@ -1,14 +1,10 @@
 from csa.models.finance import Payment, PaymentByHand
-from csa.models.accounting import Transaction, LedgerEntry, Account
-from csa.utils import get_company_user
-
-
-def get_user_account(user, account_type):
-    return Account.objects.get_or_create(user=user, type=account_type)[0]
+from csa.models.accounting import LedgerEntry, Account
+from csa.finance import transactions
 
 
 def get_account_amount(user, account_type):
-    account = get_user_account(user, account_type)
+    account = transactions.get_user_account(user, account_type)
     amount = 0
 
     for entry in LedgerEntry.objects.filter(account=account):
@@ -27,32 +23,7 @@ def get_user_balance(user):
 
 
 def user_deposit_by_hand(user, amount):
-    company_user = get_company_user()
-    user_deposits_acc = get_user_account(
-        user,
-        Account.TYPE_LIABILITY_USER_BALANCE)
-
-    company_asset_account = get_user_account(
-        company_user,
-        Account.TYPE_ASSET_BANK_ACCOUNT)
-
-    transaction = Transaction.objects.create(
-        type=Transaction.TYPE_CONSUMER_PURCHASE,
-        description='{username}'.format(username=user.username),
-        amount=amount)
-
-    ledger_entries = [
-        LedgerEntry.objects.create(
-            type=LedgerEntry.TYPE_CREDIT,
-            account=user_deposits_acc,
-            amount=amount,
-            transaction=transaction),
-        LedgerEntry.objects.create(
-            type=LedgerEntry.TYPE_DEBIT,
-            account=company_asset_account,
-            amount=amount,
-            transaction=transaction)
-    ]
+    transaction = transactions.balance_deposit(user, amount)
 
     payment = Payment.objects.create(
         type=Payment.TYPE_DEPOSIT,
@@ -63,5 +34,4 @@ def user_deposit_by_hand(user, amount):
         amount=amount)
 
     payment_by_hand = PaymentByHand.objects.create(payment=payment)
-
     return payment_by_hand

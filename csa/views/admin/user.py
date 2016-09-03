@@ -1,13 +1,19 @@
 from django import forms
 from django.shortcuts import render, redirect
+from django.contrib.admin.views.decorators import staff_member_required
 from csa.models.user import User
 from csa.finance.payments import user_deposit_by_hand
 
 
 class DepositByHandForm(forms.Form):
-    amount = forms.FloatField()
+    amount = forms.DecimalField(decimal_places=2)
+
+    def clean_amount(self):
+        # convert to cents
+        return self.cleaned_data['amount'] * 100
 
 
+@staff_member_required
 def deposit_by_hand(request, user_id):
     selected_user = User.objects.get(pk=user_id)
     if request.method == 'POST':
@@ -16,7 +22,7 @@ def deposit_by_hand(request, user_id):
             amount = form.cleaned_data['amount']
             user_deposit_by_hand(selected_user, amount)
             # TODO: dont hardcode this
-            return redirect('/admin/csa/consumer/')
+            return redirect('admin:csa_consumer_changelist')
     else:
         form = DepositByHandForm()
 

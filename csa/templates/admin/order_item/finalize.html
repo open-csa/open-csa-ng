@@ -1,0 +1,37 @@
+{% extends "admin/base_site.html" %}
+
+{% block content %}
+  <form method="POST">
+    {% csrf_token %}
+    {{ formset.management_form }}
+    {% for producer, order_items in producer_order_items.items %}
+      <div>
+	<h1>{{ producer.get_full_name }}</h1>
+	<table>
+	  <thead>
+	    <tr>
+	      <th>Προϊόν</th>
+	      <th>Ποικιλία</th>
+	      <th>Καταναλωτής</th>
+	      <th>Ποσότητα</th>
+	      <th>Παραδοτέα Ποσότητα</th>
+	    </tr>
+	  </thead>
+	  <tbody>
+
+	    {% for order_item in order_items %}
+	      <tr>
+		<td>{{ order_item.product_stock.product.name }}</td>
+		<td>{{ order_item.product_stock.variety }}</td>
+		<td>{{ order_item.order.user.get_full_name }}</td>
+		<td>{{ order_item.quantity }}</td>
+		<td>{{ order_item.form.as_p }}</td>
+	      </tr>
+	    {% endfor %}
+	  </tbody>
+	</table>
+      </div>
+    {% endfor %}
+    <input type="submit">
+  </form>
+{% endblock %}

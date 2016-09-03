@@ -21,6 +21,7 @@ from registration.backends.hmac.views import RegistrationView
 import csa.views
 import csa.forms.access
 import csa.views.admin.user
+import csa.views.admin.order_period
 import csa.views.products
 import csa.views.cart
 import csa.views.user
@@ -32,6 +33,9 @@ urlpatterns = [
     url(r'^admin/users/(?P<user_id>\d+)/deposit_by_hand',
         csa.views.admin.user.deposit_by_hand,
         name='admin-user-deposit-by-hand'),
+    url(r'^admin/order_periods/(?P<order_period_id>\d+)/finalize',
+        csa.views.admin.order_period.finalize,
+        name='admin-order-period-finalize'),
     url(r'^user/register/$',
         RegistrationView.as_view(
             form_class=csa.forms.access.RegistrationForm
@@ -48,5 +52,8 @@ urlpatterns = [
     url(r'^user/orders/(?P<order_id>\d+)',
         csa.views.orders.read,
         name='orders-read'),
-    url(r'^user/orders', csa.views.orders.list, name='orders-list')
+    url(r'^user/orders$', csa.views.orders.list, name='orders-list'),
+    url(r'^user/orders-producer$',
+        csa.views.orders.list_for_producer,
+        name='orders-producer')
 ]
