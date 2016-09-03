@@ -34,6 +34,8 @@ To run the application for development, do:
 $ CSA_ENVIRONMENT=development make run-dev
 ```
 
+See `bin/db-setup.py` for builtin data for testing.
+
 ## Other ##
 
 See folder `docs/` for some documentation and guidelines.
