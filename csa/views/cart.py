@@ -6,7 +6,6 @@ from django.contrib import messages
 from csa.orders import OrdersManager
 from csa import models
 from csa import utils
-from csa import exceptions
 
 
 @login_required

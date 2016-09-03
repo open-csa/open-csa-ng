@@ -5,30 +5,26 @@ import os
 import django
 os.environ['DJANGO_SETTINGS_MODULE'] = 'csa.settings'
 django.setup()
-# TODO: don't import every module individually because this is madness, do
-# something like from csa import models as m and use that
-from csa.models.user import User, UserProfile, Consumer
-from csa.models.core import (
-    ProductCategory, ProductMeasureUnit, Product, ProductStock,
-    DeliveryLocation)
+
+import csa.models as m  # noqa
 
 
 def test_data():
-    unit_kilo = ProductMeasureUnit.objects.create(name='κιλό')
-    unit_matso = ProductMeasureUnit.objects.create(name='μάτσο')
-    unit_bazaki = ProductMeasureUnit.objects.create(name='βαζάκι')
-    category_laxanika = ProductCategory.objects.create(name='Λαχανικά')
-    category_marmelada = ProductCategory.objects.create(name='Μαρμελάδα')
-    ProductCategory.objects.bulk_create([
-        ProductCategory(name='Φρούτα'),
-        ProductCategory(name='Μεταποιημένα')
+    unit_kilo = m.core.ProductMeasureUnit.objects.create(name='κιλό')
+    unit_matso = m.core.ProductMeasureUnit.objects.create(name='μάτσο')
+    unit_bazaki = m.core.ProductMeasureUnit.objects.create(name='βαζάκι')
+    category_laxanika = m.core.ProductCategory.objects.create(name='Λαχανικά')
+    category_marmelada = m.core.ProductCategory.objects.create(name='Μαρμελάδα')
+    m.core.ProductCategory.objects.bulk_create([
+        m.core.ProductCategory(name='Φρούτα'),
+        m.core.ProductCategory(name='Μεταποιημένα')
     ])
 
-    ProductCategory.objects.create(
+    m.core.ProductCategory.objects.create(
         name='Ντομάτες',
-        parent=ProductCategory.objects.get(name='Λαχανικά'))
+        parent=m.core.ProductCategory.objects.get(name='Λαχανικά'))
 
-    da = DeliveryLocation.objects.create(
+    da = m.core.DeliveryLocation.objects.create(
         name='Da',
         address='Ντεντιδάκιδων 15',
         delivery_weekday=2,
@@ -38,37 +34,55 @@ def test_data():
         orders_deadline_time='18:00')
 
     password = 'p4ssw0rd'
-    admin = User.objects.create_superuser(
+    admin = m.user.User.objects.create_superuser(
         username='admin',
         email='csa@example.com',
         password=password,
         first_name='CSA',
         last_name='Διαχειρηστής')
 
-    consumer = User.objects.create_user(
+    consumer = m.user.User.objects.create_user(
         username='consumer',
         email='consumer@example.com',
         password=password,
         first_name='Τάκης',
         last_name='Σουπερμαρκετάκης')
-    UserProfile.objects.create(
+    m.user.UserProfile.objects.create(
         user=consumer,
         phone_number='+306976823542',
-        consumer=Consumer.objects.create(
+        consumer=m.user.Consumer.objects.create(
             preferred_delivery_location=da
         ))
 
-    producer = User.objects.create_user(
-        username='producer',
-        email='producer@example.com',
+    vasw = m.user.User.objects.create_user(
+        username='vasw',
+        email='vasw@example.com',
         password=password,
         first_name='Βάσω',
         last_name='Παρασύρη')
-    UserProfile.objects.create(
-        user=producer,
-        phone_number='+306976823542')
+    m.user.UserProfile.objects.create(
+        user=vasw,
+        phone_number='+306976823542',
+        producer=m.user.Producer.objects.create(),
+        consumer=m.user.Consumer.objects.create(
+            preferred_delivery_location=da
+        ))
 
-    aggouri = Product.objects.create(
+    mixalis = m.user.User.objects.create_user(
+        username='mixalis',
+        email='mixalis@example.com',
+        password=password,
+        first_name='Μιχάλης',
+        last_name='Μανιαδάκης')
+    m.user.UserProfile.objects.create(
+        user=mixalis,
+        phone_number='+306976823542',
+        producer=m.user.Producer.objects.create(),
+        consumer=m.user.Consumer.objects.create(
+            preferred_delivery_location=da
+        ))
+
+    aggouri = m.core.Product.objects.create(
         name='Αγγούρι',
         description='Το αγγούρι είναι καρπός που προέρχεται από το έρπον και '
         'αναρριχώμενο ετήσιο φυτό της αγγουριάς Cucumis sativus-Σικυός ο '
@@ -80,19 +94,19 @@ def test_data():
         unit=unit_kilo)
     aggouri.categories.add(category_laxanika)
 
-    aggouri_vasw = ProductStock.objects.create(
+    aggouri_vasw = m.core.ProductStock.objects.create(
         product=aggouri,
-        producer=producer,
+        producer=vasw,
         variety='Κλωσσούδι',
         description='Τα λεγόμενα αγγουράκια της Βάσως',
-        is_available = True,
-        is_stockable = False,
+        is_available=True,
+        is_stockable=False,
         quantity=0,
         price=150)
     aggouri_vasw.supported_delivery_locations.add(da)
 
 
-    marmelada = Product.objects.create(
+    marmelada = m.core.Product.objects.create(
         name='Μαρμελάδα',
         description='Η μαρμελάδα... τι να πρωτογράψει κανείς; Αυτό το αρχαίο γλυκό '
                     'πασάλημα ψωμιού έχει κλέψει τις καρδιές και τους στοματικούς μας '
@@ -103,9 +117,9 @@ def test_data():
         unit=unit_bazaki)
     marmelada.categories.add(category_marmelada)
 
-    marmelada_vasw = ProductStock.objects.create(
+    marmelada_vasw = m.core.ProductStock.objects.create(
         product=marmelada,
-        producer=producer,
+        producer=mixalis,
         variety='Φράουλα',
         description='Τόσο γλυκιά που θα σας πέσουνε τα δόντια',
         is_available=True,

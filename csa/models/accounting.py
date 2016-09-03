@@ -20,16 +20,17 @@ class Account(models.Model):
 
 
 class Transaction(models.Model):
-    TYPE_CONSUMER_PURCHASE = 1
-    TYPE_PRODUCER_PAYMENT = 2
+    TYPE_BALANCE_DEPOSIT = 1
+    TYPE_PRODUCTS_PURCHASE = 2
+    TYPE_PRODUCTS_REFUND = 3
 
     TYPES = (
-        (TYPE_CONSUMER_PURCHASE, 'Consumer Purchase'),
-        (TYPE_PRODUCER_PAYMENT, 'Producer Payment')
+        (TYPE_BALANCE_DEPOSIT, 'Balance Deposit'),
+        (TYPE_PRODUCTS_PURCHASE, 'Products Purchase'),
+        (TYPE_PRODUCTS_REFUND, 'Products Refund')
     )
 
     type = models.IntegerField(choices=TYPES)
-    description = models.TextField()
     amount = models.PositiveIntegerField()
 
 

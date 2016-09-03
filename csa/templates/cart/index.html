@@ -27,6 +27,7 @@
       <th>Περιγραφή</th>
       <th>Ποσότητα</th>
       <th>Τιμή</th>
+      <th>Συνολική Τιμή</th>
   </thead>
   <tbody>
     {% for item in cart.items.all %}
@@ -36,6 +37,7 @@
       <th>{{ item.product_stock.producer.get_full_name }}</td>
       <td>{{ item.description }}</td>
       <td>{{ item.quantity }}</td>
+      <td>{{ item.product_stock.price|currency }}</td>
       <td>{{ item.total_price|currency }}</td>
     </tr>
     {% endfor %}

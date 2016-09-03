@@ -1,11 +1,12 @@
 {% extends "admin/base_site.html" %}
 
 {% block content %}
-<p>The deposit will be applied to: {{ selected_user.username }}</p>
-
+<p>The deposit will be applied to: {{ selected_user.get_full_name }}</p>
+<div>
 <form action="" method="post">
     {% csrf_token %}
     {{ form }}
     <input type="submit">
 </form>
+</div>
 {% endblock %}

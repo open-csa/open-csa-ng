@@ -5,7 +5,7 @@ from registration.signals import user_registered
 
 
 class Producer(models.Model):
-    pass
+    dummy_field = models.IntegerField(null=True)
 
     def __str__(self):
         return self.profile.user.username
@@ -36,9 +36,7 @@ class UserProfile(models.Model):
     consumer = models.OneToOneField(
         Consumer,
         on_delete=models.CASCADE,
-        related_name='profile',
-        blank=True,
-        null=True)
+        related_name='profile')
 
     def __str__(self):
         return self.user.username

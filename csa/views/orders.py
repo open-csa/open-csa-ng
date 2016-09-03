@@ -17,3 +17,17 @@ def list(request):
     return render(request, 'orders/list.html', {
         'orders': orders
     })
+
+
+@login_required
+def list_for_producer(request):
+    order_items = (
+        m.core.OrderItem.objects
+        .select_related('product_stock')
+        .select_related('product_stock__producer')
+        .filter(product_stock__producer=request.user)
+    )
+
+    return render(request, 'orders/list-for-producer.html', {
+        'order_items': order_items
+    })
