@@ -79,10 +79,13 @@ class ProductStockAdmin(ModelAdmin):
         'is_available',
         'is_stockable',
         'quantity',
-        'price')
+        'price_human_readable')
 
     def producer_full_name(self, product_stock):
         return product_stock.producer.get_full_name()
+
+    def price_human_readable(self, product_stock):
+        return utils.human_readable_cents(product_stock.price)
 
 
 class UserBaseModelAdmin(ModelAdmin):
