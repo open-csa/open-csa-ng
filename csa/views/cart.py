@@ -6,6 +6,7 @@ from django.contrib import messages
 from csa.orders import OrdersManager
 from csa import models as m
 from csa import utils
+from csa import exceptions
 
 
 @login_required
@@ -48,7 +49,13 @@ def clear(request):
 @require_POST
 def checkout(request):
     cart = utils.get_user_cart(request.user)
-    order = OrdersManager.checkout(cart)
+    try:
+        order = OrdersManager.checkout(cart)
+    except exceptions.UserError as exc:
+        messages.error(request, exc.message)
+        return redirect('cart-index')
+
+    raise Exception('BLA')
     messages.success(request, 'Επιτυχής καταχώρηση παραγγελίας')
     return redirect('orders-read', order_id=order.pk)
 
