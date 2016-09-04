@@ -1,3 +1,4 @@
+import locale
 import csa.models as m
 from datetime import datetime
 import pytz
@@ -17,3 +18,7 @@ def get_company_user():
 
 def get_user_cart(user_id):
     return m.core.Cart.objects.get_or_create(user_id=user_id)[0]
+
+
+def human_readable_cents(amount):
+    return locale.currency(amount / 100, grouping=True)

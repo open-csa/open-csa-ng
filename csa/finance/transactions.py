@@ -53,17 +53,16 @@ def balance_deposit(user, amount):
         amount=amount)
 
 
-def _order_item_key_producer(order_item):
-    return order_item.product_stock.producer.id
-
-
 def products_purchase(order):
     # group order items by producer
     consumer = order.user
-    order_items = sorted(order.items.all(), key=_order_item_key_producer)
+    order_items = sorted(
+        order.items.all(),
+        key=lambda order_item: order_item.product_stock.producer.id)
+
     order_items_by_producer = itertools.groupby(
         order_items,
-        key=_order_item_key_producer)
+        key=lambda order_item: order_item.product_stock.producer)
 
     for producer, order_items in order_items_by_producer:
         amount = sum(item.total_price() for item in order_items)
@@ -90,7 +89,7 @@ def order_item_fulfillment_changed(order_item, diff_quantity):
         credit_user = consumer
         debit_user = producer
 
-    amount = abs(diff_quantity) * order_item.product_stock.price
+    amount = abs(diff_quantity) * order_item.product_stock_price
     create_transaction(
         type=transaction_type,
         amount=amount,

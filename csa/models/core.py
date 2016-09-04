@@ -142,9 +142,6 @@ class CartAndOrderItem(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-    def total_price(self):
-        return self.quantity * self.product_stock.price
-
 
 class CartItem(CartAndOrderItem):
     class Meta:
@@ -153,16 +150,25 @@ class CartItem(CartAndOrderItem):
 
     cart = models.ForeignKey(Cart, related_name='items')
 
+    def total_price(self):
+        return self.quantity * self.product_stock.price
+
 
 class OrderItem(CartAndOrderItem):
     class Meta:
         unique_together = (('product_stock', 'order'),)
 
-    # TODO: on_delete what?
-    # TODO: product or product stock? crutial logic decision
-    # TODO: copy product item details here. this is permanent order
     order = models.ForeignKey(Order, related_name='items')
+    product_stock_price = models.PositiveIntegerField()
 
     # this is filled later when the administrator describes the fulfillment
     # result
     quantity_fulfilled = models.FloatField(null=True)
+
+    def total_price(self):
+        if self.quantity_fulfilled is None:
+            quantity = self.quantity
+        else:
+            quantity = self.quantity_fulfilled
+
+        return quantity * self.product_stock_price

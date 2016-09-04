@@ -228,6 +228,7 @@ class OrdersManager:
         for item in cart_items:
             order.items.create(
                 product_stock=item.product_stock,
+                product_stock_price=item.product_stock.price,
                 quantity=item.quantity,
                 order=order)
 
