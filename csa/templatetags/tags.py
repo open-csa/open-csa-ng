@@ -1,5 +1,7 @@
 import locale
 from django import template
+from csa import utils
+
 
 register = template.Library()
 # use system locale
@@ -15,4 +17,4 @@ def active(context, url_name):
 
 @register.filter()
 def currency(value):
-    return locale.currency(value / 100, grouping=True)
+    return utils.human_readable_cents(value)

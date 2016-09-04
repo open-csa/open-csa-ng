@@ -8,6 +8,7 @@ from django.utils.safestring import mark_safe
 from related_admin import RelatedFieldAdmin as ModelAdmin
 from csa.finance.payments import get_user_balance
 import csa.models as m
+from csa import utils
 
 
 admin.site.site_header = 'Διαχείρηση CSA'
@@ -94,7 +95,7 @@ class UserBaseModelAdmin(ModelAdmin):
 
     def balance(self, user):
         balance = get_user_balance(user.profile.user)
-        return locale.currency(balance / 100, grouping=True)
+        return utils.human_readable_cents(balance)
 
     def user_full_name(self, user):
         return user.profile.user.get_full_name()
@@ -176,7 +177,7 @@ class Transaction(ModelAdmin):
         'amount_currency')
 
     def amount_currency(self, transaction):
-        return locale.currency(transaction.amount / 100, grouping=True)
+        return utils.human_readable_cents(transaction.amount)
 
 
 # register simple models
