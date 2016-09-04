@@ -1,5 +1,6 @@
 from django import forms
 from django.shortcuts import render, redirect
+from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib import messages
 import csa.models as m
 from csa.orders import OrdersManager
@@ -18,6 +19,7 @@ FinalizeOrderItemFormSet = forms.formset_factory(
     FinalizeOrderItemForm)
 
 
+@staff_member_required
 def finalize(request, order_period_id):
     # check if order period is already finalized
     # or if order period is not over yet
