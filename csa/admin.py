@@ -72,7 +72,16 @@ class ProductAdmin(ModelAdmin):
 
 @admin.register(m.core.ProductStock)
 class ProductStockAdmin(ModelAdmin):
-    list_display = ('product', 'producer', 'quantity', 'price')
+    list_display = (
+        'product',
+        'producer_full_name',
+        'is_available',
+        'is_stockable',
+        'quantity',
+        'price')
+
+    def producer_full_name(self, product_stock):
+        return product_stock.producer.get_full_name()
 
 
 class UserBaseModelAdmin(ModelAdmin):
