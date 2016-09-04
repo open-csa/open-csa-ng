@@ -17,6 +17,7 @@
       <th>Ποικιλία</th>
       <th>Παραγωγός</th>
       <th>Ποσότητα</th>
+      <th>Παραδοτέα Ποσότητα</th>
       <th>Τιμή</th>
   </thead>
   <tbody>
@@ -26,6 +27,11 @@
       <td>{{ item.product_stock.variety }}</td>
       <td>{{ item.product_stock.producer.get_full_name }}</td>
       <td>{{ item.quantity }}</td>
+      {% if item.quantity_fulfilled is not None %}
+	<td>{{ item.quantity_fulfilled }}</td>
+      {% else %}
+	<td>—</td>
+      {% endif %}
       <td>{{ item.total_price|currency }}</td>
     </tr>
     {% endfor %}
