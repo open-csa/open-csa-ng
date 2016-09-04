@@ -1,0 +1,22 @@
+{
+  "name": "open-csa-ng",
+  "scripts": {},
+  "env": {
+    "CSA_ENVIRONMENT": {
+      "required": true
+    }
+  },
+  "formation": {
+    "web": {
+      "quantity": 1
+    }
+  },
+  "addons": [
+    "heroku-postgresql"
+  ],
+  "buildpacks": [
+    {
+      "url": "https://github.com/danmilon/heroku-buildpack-python.git"
+    }
+  ]
+}
