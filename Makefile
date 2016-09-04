@@ -27,7 +27,8 @@ test:
 	. venv/bin/activate && python -m unittest -v ${TEST_ARGS}
 
 run-dev:
-	. venv/bin/activate && ./manage.py runserver
+	# set LANG for variable localization (currency sign etc)
+	. venv/bin/activate && LANG=el_GR.utf8 ./manage.py runserver
 
 # drop existing tables, creates new ones, and insert test data
 db-reset:
