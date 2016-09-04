@@ -4,8 +4,9 @@ from django.shortcuts import redirect, render
 from django.db.models import F
 from django.contrib import messages
 from csa.orders import OrdersManager
-from csa import models
+from csa import models as m
 from csa import utils
+from csa import exceptions
 
 
 @login_required
@@ -22,7 +23,7 @@ def index(request):
 def add(request):
     stock_id = int(request.POST['stock_id'])
     quantity = float(request.POST['quantity'])
-    stock = models.core.ProductStock.objects.get(pk=stock_id)
+    stock = m.core.ProductStock.objects.get(pk=stock_id)
     cart = utils.get_user_cart(request.user.id)
     item, created = cart.items.get_or_create(
         product_stock=stock,
@@ -40,7 +41,7 @@ def add(request):
 @require_POST
 def clear(request):
     cart = utils.get_user_cart(request.user.id)
-    models.core.CartItem.objects.filter(cart=cart).delete()
+    m.core.CartItem.objects.filter(cart=cart).delete()
     return redirect('cart-index')
 
 
@@ -48,6 +49,28 @@ def clear(request):
 @require_POST
 def checkout(request):
     cart = utils.get_user_cart(request.user)
-    order = OrdersManager.checkout(cart)
+    try:
+        order = OrdersManager.checkout(cart)
+    except exceptions.UserError as exc:
+        messages.error(request, exc.message)
+        return redirect('cart-index')
+
+    raise Exception('BLA')
     messages.success(request, 'Επιτυχής καταχώρηση παραγγελίας')
     return redirect('orders-read', order_id=order.pk)
+
+
+@login_required
+@require_POST
+def remove_item(request, cart_item_id):
+    num_deleted = m.core.CartItem.objects.filter(id=cart_item_id).delete()
+    if num_deleted == 0:
+        messages.error(
+            request,
+            'Το συγκεκριμένο προϊόν δε βρέθηκε στο καλάθι σας')
+    else:
+        messages.success(
+            request,
+            'Επιτυχής αφαίρεση προϊόντος απο το καλάθι σας')
+
+    return redirect('cart-index')

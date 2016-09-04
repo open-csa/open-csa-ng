@@ -18,3 +18,6 @@ class ConsumerEditForm(ModelForm):
     class Meta:
         model = Consumer
         fields = ['preferred_delivery_location']
+        labels = {
+            'preferred_delivery_location': 'Προτιμιτέο σημείο παράδοσης'
+        }

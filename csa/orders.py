@@ -212,13 +212,18 @@ class OrdersManager:
     def checkout(cls, cart):
         cart_items = cart.items.all()
         if not cart_items:
-            raise exceptions.CartIsEmptyError('cart is empty')
+            raise exceptions.CartIsEmptyError(
+                'Η παραγγελία σας είναι άδεια')
 
         delivery_location = (
             cart.user.profile.consumer
             .preferred_delivery_location)
 
         order_period = cls.get_current_order_period(delivery_location)
+        if order_period.status == m.core.OrderPeriod.STATUS_NO_MORE_ORDERS:
+            raise exceptions.NoMoreOrdersError(
+                'Το διάστημα υποβολής παραγγελιών έχει παρέλθει')
+
         order = m.core.Order.objects.create(
             comment=cart.comment,
             user=cart.user,
