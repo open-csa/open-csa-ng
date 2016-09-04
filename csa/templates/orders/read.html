@@ -16,7 +16,6 @@
       <th>Προιόν</th>
       <th>Ποικιλία</th>
       <th>Παραγωγός</th>
-      <th>Περιγραφή</th>
       <th>Ποσότητα</th>
       <th>Τιμή</th>
   </thead>
@@ -25,8 +24,7 @@
     <tr>
       <td>{{ item.product_stock.product.name }}</td>
       <td>{{ item.product_stock.variety }}</td>
-      <th>{{ item.product_stock.producer.get_full_name }}</td>
-      <td>{{ item.description }}</td>
+      <td>{{ item.product_stock.producer.get_full_name }}</td>
       <td>{{ item.quantity }}</td>
       <td>{{ item.total_price|currency }}</td>
     </tr>
