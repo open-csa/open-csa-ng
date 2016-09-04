@@ -16,7 +16,8 @@ class FinalizeOrderItemForm(forms.Form):
 
 
 FinalizeOrderItemFormSet = forms.formset_factory(
-    FinalizeOrderItemForm)
+    FinalizeOrderItemForm,
+    extra=0)
 
 
 @staff_member_required
