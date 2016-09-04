@@ -118,6 +118,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ATOMIC_REQUESTS': True
     }
 }
 
@@ -180,8 +181,6 @@ BOOTSTRAP3 = {
     'jquery_url': '/static/js/lib/jquery.min.js',
     'javascript_url': '/static/js/lib/bootstrap.min.js'
 }
-
-ATOMIC_REQUESTS = True
 
 # csa-specific
 CSA_DELIVERY_WEEKDAY = 4
