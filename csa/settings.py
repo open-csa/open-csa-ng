@@ -28,17 +28,16 @@ if csa_env == 'production':
     DEBUG = False
 elif csa_env == 'development':
     # development specific
-    pass
+    EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 elif csa_env == 'test':
     # test specific
-    pass
+    EMAIL_BACKEND = 'django.core.mail.backends.locmem.EmailBackend'
 else:
     raise ValueError(
         '"{}" not a valid CSA_ENVIRONMENT value'.format(csa_env))
 
 # development or test specific settings
 if csa_env in ('development', 'test'):
-    EMAIL_BACKEND = 'django.core.mail.backends.dummy.EmailBackend'
     SECRET_KEY = 'q_4b3b3nwm*$eu9l()w&@og2(o$*06c(rfvv!)$(5vm#ec2-lq'
     DEBUG = True
 
