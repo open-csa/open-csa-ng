@@ -16,8 +16,8 @@ print-info:
 # install dependencies according to environment and also link ourselves as a
 # package, grabbing information from setup.py
 deps: print-info venv
-	. venv/bin/activate && python -m pip install -r requirements-$(CSA_ENVIRONMENT).txt
-	. venv/bin/activate && python -m pip install -e .
+	. venv/bin/activate && pip install -r requirements-$(CSA_ENVIRONMENT).txt
+	. venv/bin/activate && pip install -e .
 
 # create python virtual environment
 venv:
