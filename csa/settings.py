@@ -26,6 +26,16 @@ if csa_env == 'production':
     # production specific
     # let's be explicit about this one
     DEBUG = False
+    EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+    EMAIL_HOST = 'smtp.sendgrid.net'
+    EMAIL_HOST_USER = os.getenv('SENDGRID_USERNAME')
+    EMAIL_HOST_PASSWORD = os.getenv('SENDGRID_PASSWORD')
+    EMAIL_PORT = 587
+    EMAIL_USE_TLS = True
+    if None in (EMAIL_HOST_USER, EMAIL_HOST_PASSWORD):
+        raise ValueError(
+            'you need to set environmental variables '
+            'SENDGRID_USERNAME and SENDGRID_PASSWORD')
 elif csa_env == 'development':
     # development specific
     EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
