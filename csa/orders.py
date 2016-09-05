@@ -237,7 +237,8 @@ class OrdersManager:
         order = m.core.Order.objects.create(
             comment=cart.comment,
             user=cart.user,
-            order_period=order_period)
+            order_period=order_period,
+            delivery_location=delivery_location)
 
         # TODO: crazy db ops here
         for item in cart_items:
