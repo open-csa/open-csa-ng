@@ -40,6 +40,12 @@ def test_data():
         password=password,
         first_name='CSA',
         last_name='Διαχειρηστής')
+    m.user.UserProfile.objects.create(
+        user=admin,
+        phone_number='+306976823542',
+        consumer=m.user.Consumer.objects.create(
+            preferred_delivery_location=da
+        ))
 
     consumer = m.user.User.objects.create_user(
         username='consumer',
