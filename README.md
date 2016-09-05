@@ -1,8 +1,37 @@
+## Run in vagrant for local development ##
+
+Whether you're running on windows or linux, you'll need a working vagrant
+installation and the `vagrant-vbguest` plugin.
+
+You'll need to git clone the `open-csa-ng` repository, and from within the
+`open-csa-ng` directory, run:
+
+```
+vagrant up
+```
+
+This is going to take a while, especially if you don't have the vagrant box
+being used. Then you run:
+
+```
+vagrant ssh
+```
+
+to get into the machine. `ls` and see that there is an `open-csa-ng` folder
+with all the files in. This is a shared folder between your actual host
+machine, and the guest (virtual) machine.
 
 ## Dependencies ##
 
 * `python3`
+* `virtualenv`
+* `make`
 * `sqlite3` (temporarily, until we get a dedicated db)
+* `pkg-config`
+* `graphviz`
+* `libgraphviz-dev`
+
+These are the names of the packages for debian and possibly ubuntu.
 
 ## How to install ##
 
@@ -11,7 +40,7 @@ First you need to clone the repository.
 Then to setup the application, run the following command:
 
 ```
-$ CSA_ENVIRONMENT=development make
+CSA_ENVIRONMENT=development make
 ```
 
 Depending on the kind of installation you're after, you need to adjust the
@@ -38,4 +67,4 @@ See `bin/db-setup.py` for builtin data for testing.
 
 ## Other ##
 
-See folder `docs/` for some documentation and guidelines.
+See folder `docs/` for some documentation, guidelines, and a nice models graph!
