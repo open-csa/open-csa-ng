@@ -1,0 +1,14 @@
+{% load tags %}
+{% block subject %}Αλλαγή παραδοτέας ποσότητας για {{ order_item.product_stock.product.name|lower }}{% endblock %}
+{% block plain %}
+- αρχική ποσότητα παραγγελίας: {{ order_item.quantity }} {{ order_item.product_stock.product.unit.name }}
+- ήδη πληρωμένη ποσότητα: {{ paid_quantity }} {{ order_item.product_stock.product.unit.name }}
+- παραδοτέα ποσότητα: {{ order_item.quantity_fulfilled }} {{ order_item.product_stock.product.unit.name }}
+
+Η αλλαγή αφορά την παραγγελία:
+{% absurl 'orders-read' order_id=order_item.order.id %}
+
+Το πορτοφόλι σας έχει ανανεωθεί αναλόγως.
+Σας ευχαριστούμε και σας ζητούμε συγνώμη για την ταλαιπωρία.
+{# TODO: add link to transaction #}
+{% endblock %}

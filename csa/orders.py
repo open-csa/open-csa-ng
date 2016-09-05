@@ -4,6 +4,7 @@ from collections import namedtuple
 from csa import models as m
 from csa import utils, exceptions
 from csa.finance import transactions
+import csa.comms.mail
 
 OrderPeriodSpan = namedtuple('OrderPeriodSpan', ['starts_at', 'ends_at'])
 
@@ -139,10 +140,19 @@ class OrdersManager:
             order_item.save()
 
             diff_quantity = quantity_fulfilled - paid_quantity
-            if diff_quantity != 0:
-                transactions.order_item_fulfillment_changed(
-                    order_item,
-                    diff_quantity)
+            if diff_quantity == 0:
+                continue
+
+            transaction = transactions.order_item_fulfillment_changed(
+                order_item,
+                diff_quantity)
+
+            # send email too
+            csa.comms.mail.send_order_item_fulfillment_change_mail(
+                user=order_item.order.user,
+                order_item=order_item,
+                paid_quantity=paid_quantity,
+                transaction=transaction)
 
         # see if order_period needs to have status set to FINALIZED
         unfulfilled_items = cls.get_unfulfilled_order_items(order_period_id)
@@ -243,4 +253,21 @@ class OrdersManager:
         # now empty cart
         m.core.CartItem.objects.filter(cart=cart).delete()
 
+        # send order confirmation email
+        csa.comms.mail.send_order_confirmation_mail(cart.user, order)
+
+        # send order notification to producers
+        # TODO: more crazy db ops
+        producers = set(
+            order_item.product_stock.producer
+            for order_item in order.items.all())
+
+        for producer in producers:
+            order_items = [
+                order_item
+                for order_item in order.items.all()
+                if order_item.product_stock.producer.id == producer.id
+            ]
+
+            csa.comms.mail.send_producer_new_order_mail(producer, order_items)
         return order

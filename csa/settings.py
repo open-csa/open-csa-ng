@@ -38,6 +38,7 @@ if csa_env == 'production':
             'SENDGRID_USERNAME and SENDGRID_PASSWORD')
     SECRET_KEY = os.getenv('DJANGO_SECRET_KEY')
     ALLOWED_HOSTS = ('.open-csa-ng.herokuapp.com',)
+    SITE_URL = 'https://open-csa-ng.herokuapp.com'
 elif csa_env == 'development':
     # development specific
     EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
@@ -50,6 +51,7 @@ else:
 
 # development or test specific settings
 if csa_env in ('development', 'test'):
+    SITE_URL = 'http://localhost:8000'
     SECRET_KEY = 'q_4b3b3nwm*$eu9l()w&@og2(o$*06c(rfvv!)$(5vm#ec2-lq'
     DEBUG = True
 
@@ -188,9 +190,13 @@ BOOTSTRAP3 = {
     'javascript_url': '/static/js/lib/bootstrap.min.js'
 }
 
+# templated emails
+TEMPLATED_EMAIL_FILE_EXTENSION = 'j2.mail'
+
 # csa-specific
 CSA_DELIVERY_WEEKDAY = 4
 CSA_DELIVERY_TIME = 5
+CSA_EMAIL_FROM = 'noreply@open-csa-ng.herokuapp.com'
 
 BROKER_URL = 'django://'
 # CELERYBEAT_SCHEDULER = 'djcelery.schedulers.DatabaseScheduler'

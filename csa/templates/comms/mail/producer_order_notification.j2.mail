@@ -1,0 +1,19 @@
+{% load tags %}
+{% block subject %}Νέα παραγγελία για {{ delivery_location.name }}{% endblock %}
+{% block plain %}
+Αγαπητέ μας παραγωγέ!
+
+Δεχτήκαμε μια παραγγελία για εσένα! Έλεγξε την διαθεσημότητα των προϊόντων και
+εαν δεν είναι διαθέσημα ενημέρωσέ μας το συντομότερο δυνατόν.
+
+{% for order_item in order_items %}
+  - {{ order_item.quantity }} {{ order_item.product_stock.product.unit.name }} x {{ order_item.product_stock.product.name }} ({{ order_item.product_stock.variety }})
+{% endfor %}
+
+Μπορείς να παρακολουθείς συγκεντρωτικά τις παραγγελίες σου στην διεύθυνση:
+{% absurl 'orders-producer' %}
+
+{# TODO: add link to delivery location details #}
+Σε περιμένουμε την ημέρα παράδοσης,
+Καλές δουλειές!
+{% endblock %}
