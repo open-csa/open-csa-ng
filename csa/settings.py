@@ -37,9 +37,6 @@ if csa_env == 'production':
             'you need to set environmental variables '
             'SENDGRID_USERNAME and SENDGRID_PASSWORD')
     SECRET_KEY = os.getenv('DJANGO_SECRET_KEY')
-    if SECRET_KEY is None:
-        raise ValueError(
-            'you need to set the environmental variable SECRET_KEY')
 elif csa_env == 'development':
     # development specific
     EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
