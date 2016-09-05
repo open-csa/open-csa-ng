@@ -37,7 +37,10 @@ if csa_env == 'production':
             'you need to set environmental variables '
             'SENDGRID_USERNAME and SENDGRID_PASSWORD')
     SECRET_KEY = os.getenv('DJANGO_SECRET_KEY')
-    ALLOWED_HOSTS = ('.open-csa-ng.herokuapp.com',)
+    # we don't do open-csa-ng.herokuapp.com here because review applications
+    # get named open-csa-ng-pr-XX.herokuapp.com and requests to them fail.
+    # We'll get our own domain eventually
+    ALLOWED_HOSTS = ('.herokuapp.com',)
     SITE_URL = 'https://open-csa-ng.herokuapp.com'
 elif csa_env == 'development':
     # development specific
@@ -55,6 +58,24 @@ if csa_env in ('development', 'test'):
     SECRET_KEY = 'q_4b3b3nwm*$eu9l()w&@og2(o$*06c(rfvv!)$(5vm#ec2-lq'
     DEBUG = True
 
+# silly heroku won't pick up logs from stderr
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+            'stream': sys.stdout
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console'],
+            'level': os.getenv('DJANGO_LOG_LEVEL', 'INFO'),
+        },
+    },
+}
+
 
 djcelery.setup_loader()
 
@@ -71,6 +92,7 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
+    'whitenoise.runserver_nostatic',
     'django.contrib.staticfiles',
     'django.contrib.humanize',
 
@@ -91,6 +113,8 @@ if csa_env in ('development', 'test'):
 
 MIDDLEWARE_CLASSES = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -167,7 +191,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.9/howto/static-files/
 
-STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_DIRS = [
