@@ -26,6 +26,19 @@ if csa_env == 'production':
     # production specific
     # let's be explicit about this one
     DEBUG = False
+    EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+    EMAIL_HOST = 'smtp.sendgrid.net'
+    EMAIL_HOST_USER = os.getenv('SENDGRID_USERNAME')
+    EMAIL_HOST_PASSWORD = os.getenv('SENDGRID_PASSWORD')
+    EMAIL_PORT = 587
+    EMAIL_USE_TLS = True
+    if None in (EMAIL_HOST_USER, EMAIL_HOST_PASSWORD):
+        raise ValueError(
+            'you need to set environmental variables '
+            'SENDGRID_USERNAME and SENDGRID_PASSWORD')
+    SECRET_KEY = os.getenv('DJANGO_SECRET_KEY')
+    ALLOWED_HOSTS = ('.open-csa-ng.herokuapp.com',)
+    SITE_URL = 'https://open-csa-ng.herokuapp.com'
 elif csa_env == 'development':
     # development specific
     EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
@@ -38,6 +51,7 @@ else:
 
 # development or test specific settings
 if csa_env in ('development', 'test'):
+    SITE_URL = 'http://localhost:8000'
     SECRET_KEY = 'q_4b3b3nwm*$eu9l()w&@og2(o$*06c(rfvv!)$(5vm#ec2-lq'
     DEBUG = True
 
@@ -46,12 +60,6 @@ djcelery.setup_loader()
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
-
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/1.9/howto/deployment/checklist/
-
-ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -182,9 +190,13 @@ BOOTSTRAP3 = {
     'javascript_url': '/static/js/lib/bootstrap.min.js'
 }
 
+# templated emails
+TEMPLATED_EMAIL_FILE_EXTENSION = 'j2.mail'
+
 # csa-specific
 CSA_DELIVERY_WEEKDAY = 4
 CSA_DELIVERY_TIME = 5
+CSA_EMAIL_FROM = 'noreply@open-csa-ng.herokuapp.com'
 
 BROKER_URL = 'django://'
 # CELERYBEAT_SCHEDULER = 'djcelery.schedulers.DatabaseScheduler'

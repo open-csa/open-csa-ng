@@ -3,6 +3,7 @@ from django.shortcuts import render, redirect
 from django.contrib.admin.views.decorators import staff_member_required
 from csa.models.user import User
 from csa.finance.payments import user_deposit_by_hand
+import csa.comms.mail
 
 
 class DepositByHandForm(forms.Form):
@@ -20,8 +21,10 @@ def deposit_by_hand(request, user_id):
         form = DepositByHandForm(request.POST)
         if form.is_valid():
             amount = form.cleaned_data['amount']
-            user_deposit_by_hand(selected_user, amount)
-            # TODO: dont hardcode this
+            payment = user_deposit_by_hand(selected_user, amount)
+            # send email too
+            csa.comms.mail.send_balance_deposit_mail(
+                selected_user, payment)
             return redirect('admin:csa_consumer_changelist')
     else:
         form = DepositByHandForm()

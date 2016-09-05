@@ -27,7 +27,6 @@ class Payment(models.Model):
 
     user = models.ForeignKey(User)
     transaction = models.OneToOneField(Transaction)
-    amount = models.PositiveIntegerField()
     status = models.IntegerField(choices=STATUSES)
     method = models.IntegerField(choices=METHODS)
     type = models.IntegerField(choices=TYPES)

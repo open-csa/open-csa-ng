@@ -87,7 +87,11 @@
 	  </div>
 	</nav>
 	<div class="container">
-	  {% autoescape off %}{% bootstrap_messages %}{% endautoescape %}
+	  {% autoescape off %}
+	  <div class="row">
+	    {% bootstrap_messages %}
+	  </div>
+	  {% endautoescape %}
 	  {% block content %}{% endblock %}
 	</div>
       {% endblock %}

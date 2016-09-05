@@ -16,8 +16,8 @@ print-info:
 # install dependencies according to environment and also link ourselves as a
 # package, grabbing information from setup.py
 deps: print-info venv
-	. venv/bin/activate && python -m pip install -r requirements-$(CSA_ENVIRONMENT).txt
-	. venv/bin/activate && python -m pip install -e .
+	. venv/bin/activate && pip install -r requirements-$(CSA_ENVIRONMENT).txt
+	. venv/bin/activate && pip install -e .
 
 # create python virtual environment
 venv:
@@ -33,7 +33,7 @@ run-dev:
 # drop existing tables, creates new ones, and insert test data
 db-reset:
 	# TODO: don't do this when we release 1.0!
-	rm -rf csa/migrations
+	rm -rf csa/migrations db.sqlite3
 	. venv/bin/activate && ./bin/db-setup.py --drop --init --test-data
 
 pep8:
@@ -50,4 +50,4 @@ models-graph:
 		python manage.py graph_models csa -g -o models-graph.png
 
 clean:
-	rm -rf venv csa.egg-info
+	rm -rf venv csa.egg-info db.sqlite3

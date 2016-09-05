@@ -30,8 +30,7 @@ def user_deposit_by_hand(user, amount):
         status=Payment.STATUS_COMPLETE,
         method=Payment.METHOD_BY_HAND,
         transaction=transaction,
-        user=user,
-        amount=amount)
+        user=user)
 
     payment_by_hand = PaymentByHand.objects.create(payment=payment)
     return payment_by_hand

@@ -22,7 +22,7 @@ Vagrant.configure("2") do |config|
   # Create a forwarded port mapping which allows access to a specific port
   # within the machine from a port on the host machine. In the example below,
   # accessing "localhost:8080" will access port 80 on the guest machine.
-  config.vm.network "forwarded_port", guest: 8000, host: 8080
+  config.vm.network "forwarded_port", guest: 8000, host: 8000
 
   # Create a private network, which allows host-only access to the machine
   # using a specific IP.
@@ -67,7 +67,11 @@ Vagrant.configure("2") do |config|
   # documentation for more information about their specific syntax and use.
   config.vm.provision "shell", inline: <<-SHELL
   apt-get update
-  apt-get install -y python3 python3-dev graphviz libgraphviz-dev python3-virtualenv sqlite3 pkg-config make
+  # sqlite3: we won't need this when we get a real DB
+  # python3-dev graphviz libgraphviz-dev pkg-config python3-dev for graphviz
+  apt-get install -y python3 virtualenv make \
+    sqlite3 \
+    python3-dev graphviz libgraphviz-dev pkg-config python3-dev
   cd open-csa-ng
   CSA_ENVIRONMENT=development make
   SHELL

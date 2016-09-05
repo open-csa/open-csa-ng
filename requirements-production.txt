@@ -4,6 +4,7 @@ django-registration
 django-phonenumber-field
 django-related-admin
 django-widget-tweaks
+django-templated-email
 celery
 django-celery
 python-dateutil

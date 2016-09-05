@@ -1,6 +1,8 @@
 import locale
 from django import template
+from django.core.urlresolvers import reverse
 from csa import utils
+import csa.settings
 
 
 register = template.Library()
@@ -18,3 +20,8 @@ def active(context, url_name):
 @register.filter()
 def currency(value):
     return utils.human_readable_cents(value)
+
+
+@register.simple_tag()
+def absurl(view_name, *args, **kwargs):
+    return csa.settings.SITE_URL + reverse(view_name, args=args, kwargs=kwargs)

@@ -128,6 +128,7 @@ class Cart(CartAndOrderCommon):
 class Order(CartAndOrderCommon):
     user = models.ForeignKey(User)
     order_period = models.ForeignKey(OrderPeriod)
+    delivery_location = models.ForeignKey(DeliveryLocation)
 
     def __str__(self):
         return 'Order(id={id})'.format(id=self.id)
