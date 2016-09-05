@@ -1,7 +1,8 @@
 ## Run in vagrant for local development ##
 
 Whether you're running on windows or linux, you'll need a working vagrant
-installation and the `vagrant-vbguest` plugin.
+installation and the `vagrant-vbguest` plugin. On linux you can install the
+plugin with `vagrant plugin install vagrant-vbguest`.
 
 You'll need to git clone the `open-csa-ng` repository, and from within the
 `open-csa-ng` directory, run:
@@ -19,7 +20,15 @@ vagrant ssh
 
 to get into the machine. `ls` and see that there is an `open-csa-ng` folder
 with all the files in. This is a shared folder between your actual host
-machine, and the guest (virtual) machine.
+machine, and the guest (virtual) machine. The application has been installed
+with all required dependencies automatically.
+
+Now you can develop your changes on your host machine with your favorite
+editor, and ssh into the vagrant box (`vagrant ssh`) and use the casual method
+to run the application. See `How to run` below. The application when run,
+listens on port 8000. The port is forwarded on the host machine, so you can
+browse to http://localhost:8080 to see the application while it is running in
+the VM.
 
 ## Dependencies ##
 
