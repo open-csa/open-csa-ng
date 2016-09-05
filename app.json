@@ -1,21 +1,30 @@
 {
-  "name": "open-csa-ng",
-  "scripts": {},
-  "env": {
-    "CSA_ENVIRONMENT": "development",
-    "LANG": "el_GR.utf8"
-  },
-  "formation": {
-    "web": {
-      "quantity": 1
-    }
-  },
-  "addons": [
-    "heroku-postgresql"
-  ],
-  "buildpacks": [
-    {
-      "url": "https://github.com/danmilon/heroku-buildpack-python.git"
-    }
-  ]
+    "name": "open-csa-ng",
+    "scripts": {},
+    "env": {
+	"CSA_ENVIRONMENT": "production",
+	"DJANGO_SECRET_KEY": "not-the-production-secret",
+	"SENDGRID_USERNAME": {
+	    "description": "the username for sendgrid"
+	},
+	"SENDGRID_PASSWORD": {
+	    "description": "thep assword for sendgrid"
+	},
+	"LANG": {
+	    "description": "LANG env variable"
+	}
+    },
+    "formation": {
+	"web": {
+	    "quantity": 1
+	}
+    },
+    "addons": [
+	"heroku-postgresql"
+    ],
+    "buildpacks": [
+	{
+	    "url": "https://github.com/danmilon/heroku-buildpack-python.git"
+	}
+    ]
 }
