@@ -55,7 +55,6 @@ def checkout(request):
         messages.error(request, exc.message)
         return redirect('cart-index')
 
-    raise Exception('BLA')
     messages.success(request, 'Επιτυχής καταχώρηση παραγγελίας')
     return redirect('orders-read', order_id=order.pk)
 
