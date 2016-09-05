@@ -2,7 +2,7 @@
   "name": "open-csa-ng",
   "scripts": {},
   "env": {
-    "CSA_ENVIRONMENT": "development",
+    "CSA_ENVIRONMENT": "production",
     "LANG": "el_GR.utf8"
   },
   "formation": {
