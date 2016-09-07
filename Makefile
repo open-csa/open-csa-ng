@@ -21,7 +21,7 @@ deps: print-info venv
 
 # create python virtual environment
 venv:
-	virtualenv -p python3 venv --prompt '(csa)'
+	virtualenv -p python3 venv --always-copy --prompt '(csa)'
 
 test:
 	. venv/bin/activate && python -m unittest -v ${TEST_ARGS}
