@@ -21,14 +21,14 @@ deps: print-info venv
 
 # create python virtual environment
 venv:
-	virtualenv -p python3 venv --prompt '(csa)'
+	virtualenv -p python3 venv --always-copy --prompt '(csa)'
 
 test:
 	. venv/bin/activate && python -m unittest -v ${TEST_ARGS}
 
 run-dev:
 	# set LANG for variable localization (currency sign etc)
-	. venv/bin/activate && LANG=el_GR.utf8 ./manage.py runserver
+	. venv/bin/activate && LANG=el_GR.utf8 ./manage.py runserver 0.0.0.0:8000
 
 # drop existing tables, creates new ones, and insert test data
 db-reset:
