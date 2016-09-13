@@ -78,6 +78,7 @@ Vagrant.configure("2") do |config|
     python3-dev graphviz libgraphviz-dev pkg-config python3-dev \
     git
   cd open-csa-ng
+  CSA_ENVIRONMENT=development make clean
   CSA_ENVIRONMENT=development make
   SHELL
 end
