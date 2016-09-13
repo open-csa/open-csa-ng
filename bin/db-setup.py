@@ -143,13 +143,13 @@ args = parser.parse_args()
 
 if args.drop:
     subprocess.check_call(
-        './manage.py sqlflush | ./manage.py dbshell',
+        'python ./manage.py sqlflush | ./manage.py dbshell',
         shell=True)
 
 if args.init:
     for cmd in [
-            './manage.py makemigrations csa --no-input',
-            './manage.py migrate --no-input'
+            'python ./manage.py makemigrations csa --no-input',
+            'python ./manage.py migrate --no-input'
     ]:
         subprocess.check_call(cmd, shell=True)
 
