@@ -28,13 +28,13 @@ test:
 
 run-dev:
 	# set LANG for variable localization (currency sign etc)
-	. venv/bin/activate && LANG=el_GR.utf8 ./manage.py runserver 0.0.0.0:8000
+	. venv/bin/activate && LANG=el_GR.utf8 python ./manage.py runserver 0.0.0.0:8000
 
 # drop existing tables, creates new ones, and insert test data
 db-reset:
 	# TODO: don't do this when we release 1.0!
 	rm -rf csa/migrations db.sqlite3
-	. venv/bin/activate && ./bin/db-setup.py --drop --init --test-data
+	. venv/bin/activate && python ./bin/db-setup.py --drop --init --test-data
 
 pep8:
 	. venv/bin/activate && \
@@ -47,7 +47,7 @@ autopep8:
 
 models-graph:
 	. venv/bin/activate && \
-		python manage.py graph_models csa -g -o models-graph.png
+		python ./manage.py graph_models csa -g -o models-graph.png
 
 clean:
 	rm -rf venv csa.egg-info db.sqlite3

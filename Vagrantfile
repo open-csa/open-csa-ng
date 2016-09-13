@@ -66,13 +66,19 @@ Vagrant.configure("2") do |config|
   # Puppet, Chef, Ansible, Salt, and Docker are also available. Please see the
   # documentation for more information about their specific syntax and use.
   config.vm.provision "shell", inline: <<-SHELL
+  # enable el_GR locale
+  sed -i /etc/locale.gen -e 's/# el_GR.UTF-8 UTF-8/el_GR.UTF-8 UTF-8/'
+  dpkg-reconfigure -f noninteractive locales
   apt-get update
   # sqlite3: we won't need this when we get a real DB
   # python3-dev graphviz libgraphviz-dev pkg-config python3-dev for graphviz
+  # git for local development
   apt-get install -y python3 virtualenv make \
     sqlite3 \
-    python3-dev graphviz libgraphviz-dev pkg-config python3-dev
+    python3-dev graphviz libgraphviz-dev pkg-config python3-dev \
+    git
   cd open-csa-ng
+  CSA_ENVIRONMENT=development make clean
   CSA_ENVIRONMENT=development make
   SHELL
 end
