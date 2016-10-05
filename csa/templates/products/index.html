@@ -22,7 +22,7 @@
 	      <td class="col-md-1">{{ stock.variety }}</td>
 	      <td class="col-md-3">{{ stock.description }}</td>
 	      <td class="col-md-2">{{ stock.producer.get_full_name }}</td>
-	      <td class="col-md-2">{{ stock.price|currency }}/{{ product.unit.name }}</td>
+	      <td class="col-md-2">{{ stock.get_overhead_price|currency }}/{{ product.unit.name }}</td>
 	      <td class="col-md-2">
 		<form class="cart-add-product-form form-inline" method="post" action="{% url 'cart-add' %}">
 		  {% csrf_token %}

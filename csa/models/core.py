@@ -1,6 +1,7 @@
 from django.db import models
 from csa.models.user import User
 from csa.models.utils import CSACharField
+import csa.finance.utils
 
 # TODO: split this module into actual pieces
 
@@ -43,7 +44,6 @@ class ProductCategory(models.Model):
         return self.id < other.id
 
 
-
 class ProductMeasureUnit(models.Model):
     name = CSACharField()
 
@@ -83,6 +83,11 @@ class ProductStock(models.Model):
 
     def __str__(self):
         return 'ProductStock(id={id})'.format(id=self.id)
+
+    def get_overhead_price(self, percent=None):
+        return self.price + csa.finance.utils.transaction_cut(
+            amount=self.price,
+            percent=percent)
 
 
 class OrderPeriod(models.Model):
@@ -124,6 +129,9 @@ class CartAndOrderCommon(models.Model):
     def total_price(self):
         return sum(item.total_price() for item in self.items.all())
 
+    def total_price_uncut(self):
+        return sum(item.total_price_uncut() for item in self.items.all())
+
 
 class Cart(CartAndOrderCommon):
     user = models.OneToOneField(User)
@@ -133,6 +141,7 @@ class Order(CartAndOrderCommon):
     user = models.ForeignKey(User)
     order_period = models.ForeignKey(OrderPeriod)
     delivery_location = models.ForeignKey(DeliveryLocation)
+    transaction_cut_percent = models.FloatField()
 
     def __str__(self):
         return 'Order(id={id})'.format(id=self.id)
@@ -156,6 +165,10 @@ class CartItem(CartAndOrderItem):
     cart = models.ForeignKey(Cart, related_name='items')
 
     def total_price(self):
+        price_uncut = self.total_price_uncut()
+        return price_uncut + csa.finance.utils.transaction_cut(price_uncut)
+
+    def total_price_uncut(self):
         return self.quantity * self.product_stock.price
 
 
@@ -171,9 +184,15 @@ class OrderItem(CartAndOrderItem):
     quantity_fulfilled = models.FloatField(null=True)
 
     def total_price(self):
+        price_uncut = self.total_price_uncut()
+        return price_uncut + csa.finance.utils.transaction_cut(
+            price_uncut,
+            percent=self.order.transaction_cut_percent)
+
+    def total_price_uncut(self):
         if self.quantity_fulfilled is None:
             quantity = self.quantity
         else:
             quantity = self.quantity_fulfilled
 
-        return quantity * self.product_stock_price
+        return quantity * self.product_stock.price

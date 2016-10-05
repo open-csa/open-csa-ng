@@ -1,7 +1,7 @@
 import locale
-import csa.models as m
 from datetime import datetime
 import pytz
+import csa.models as m
 
 
 def datetime_now():

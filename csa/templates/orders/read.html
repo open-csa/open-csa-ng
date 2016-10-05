@@ -6,7 +6,6 @@
 <div class="row">
   <ul>
     <li>Ημερομηνία καταχώρησης: {{ order.created_at }}</li>
-    <li>Σύνολο: {{ order.total_price|currency }}</li>
   </ul>
 </div>
 <div class="row">
@@ -35,6 +34,14 @@
       <td>{{ item.total_price|currency }}</td>
     </tr>
     {% endfor %}
+    <tr>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td><strong>Σύνολο</strong></td>
+      <td><strong>{{ order.total_price|currency }}</strong></td>
+    </tr>
   </tbody>
 </table>
 {% endblock %}
