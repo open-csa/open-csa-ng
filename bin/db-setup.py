@@ -14,15 +14,7 @@ def test_data():
     unit_matso = m.core.ProductMeasureUnit.objects.create(name='μάτσο')
     unit_bazaki = m.core.ProductMeasureUnit.objects.create(name='βαζάκι')
     category_laxanika = m.core.ProductCategory.objects.create(name='Λαχανικά')
-    category_marmelada = m.core.ProductCategory.objects.create(name='Μαρμελάδα')
-    m.core.ProductCategory.objects.bulk_create([
-        m.core.ProductCategory(name='Φρούτα'),
-        m.core.ProductCategory(name='Μεταποιημένα')
-    ])
-
-    m.core.ProductCategory.objects.create(
-        name='Ντομάτες',
-        parent=m.core.ProductCategory.objects.get(name='Λαχανικά'))
+    category_metapoiimena = m.core.ProductCategory.objects.create(name='Μεταποιημένα')
 
     da = m.core.DeliveryLocation.objects.create(
         name='Da',
@@ -121,7 +113,7 @@ def test_data():
                     'Πέρα από την επάλυψη σε ζεστές φέτες ψωμιού το θεσπέσιο αυτό γλύκισμα '
                     'χρησιμοποιείται στη παρασκευή του αγαπημένου σε όλους γλυκό πάστα φλώρα!',
         unit=unit_bazaki)
-    marmelada.categories.add(category_marmelada)
+    marmelada.categories.add(category_metapoiimena)
 
     marmelada_vasw = m.core.ProductStock.objects.create(
         product=marmelada,

@@ -1,3 +1,9 @@
 .cart-add-product-form input[type=number] {
     width: 5em !important;
 }
+
+/* for products listing tables */
+table {
+    table-layout: fixed;
+    word-wrap: break-word;
+}

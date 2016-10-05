@@ -39,6 +39,10 @@ class ProductCategory(models.Model):
     def __str__(self):
         return self.name
 
+    def __lt__(self, other):
+        return self.id < other.id
+
+
 
 class ProductMeasureUnit(models.Model):
     name = CSACharField()
