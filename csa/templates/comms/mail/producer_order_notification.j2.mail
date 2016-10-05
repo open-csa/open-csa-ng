@@ -7,7 +7,7 @@
 εαν δεν είναι διαθέσημα ενημέρωσέ μας το συντομότερο δυνατόν.
 
 {% for order_item in order_items %}
-  - {{ order_item.quantity }} {{ order_item.product_stock.product.unit.name }} x {{ order_item.product_stock.product.name }} ({{ order_item.product_stock.variety }})
+  - {{ order_item.quantity|floatformat }} {{ order_item.product_stock.product.unit.name }} x {{ order_item.product_stock.product.name }} ({{ order_item.product_stock.variety }})
 {% endfor %}
 
 Μπορείς να παρακολουθείς συγκεντρωτικά τις παραγγελίες σου στην διεύθυνση:

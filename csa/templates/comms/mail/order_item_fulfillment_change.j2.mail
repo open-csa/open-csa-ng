@@ -1,8 +1,8 @@
 {% load tags %}
 {% block subject %}Αλλαγή παραδοτέας ποσότητας για {{ order_item.product_stock.product.name|lower }}{% endblock %}
 {% block plain %}
-- αρχική ποσότητα παραγγελίας: {{ order_item.quantity }} {{ order_item.product_stock.product.unit.name }}
-- ήδη πληρωμένη ποσότητα: {{ paid_quantity }} {{ order_item.product_stock.product.unit.name }}
+- αρχική ποσότητα παραγγελίας: {{ order_item.quantity|floatformat }} {{ order_item.product_stock.product.unit.name }}
+- ήδη πληρωμένη ποσότητα: {{ paid_quantity|floatformat }} {{ order_item.product_stock.product.unit.name }}
 - παραδοτέα ποσότητα: {{ order_item.quantity_fulfilled }} {{ order_item.product_stock.product.unit.name }}
 
 Η αλλαγή αφορά την παραγγελία:

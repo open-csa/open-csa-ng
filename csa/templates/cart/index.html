@@ -28,12 +28,11 @@
 		    <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
 		  </button>
 		</form>
-
-		{{ item.product_stock.product.name }}
+		<strong>{{ item.product_stock.product.name }}</strong>
 	      </td>
 	      <td>{{ item.product_stock.variety }}</td>
 	      <td>{{ item.product_stock.producer.get_full_name }}</td>
-	      <td>{{ item.quantity }}</td>
+	      <td>{{ item.quantity|floatformat }}</td>
 	      <td>{{ item.product_stock.get_overhead_price|currency }}</td>
 	      <td>{{ item.total_price|currency }}</td>
 	    </tr>

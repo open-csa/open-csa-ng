@@ -25,7 +25,7 @@
       <td>{{ item.product_stock.product.name }}</td>
       <td>{{ item.product_stock.variety }}</td>
       <td>{{ item.product_stock.producer.get_full_name }}</td>
-      <td>{{ item.quantity }}</td>
+      <td>{{ item.quantity|floatformat }}</td>
       {% if item.quantity_fulfilled is not None %}
 	<td>{{ item.quantity_fulfilled }}</td>
       {% else %}
