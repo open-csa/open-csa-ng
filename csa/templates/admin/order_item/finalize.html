@@ -24,7 +24,7 @@
 		<td>{{ order_item.product_stock.product.name }}</td>
 		<td>{{ order_item.product_stock.variety }}</td>
 		<td>{{ order_item.order.user.get_full_name }}</td>
-		<td>{{ order_item.quantity }}</td>
+		<td>{{ order_item.quantity|floatformat }}</td>
 		<td>{{ order_item.form.as_p }}</td>
 	      </tr>
 	    {% endfor %}

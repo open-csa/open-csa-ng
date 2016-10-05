@@ -131,7 +131,7 @@ class OrdersManager:
                 .select_related('order__user')
                 .get(id=order_item_id))
 
-            if order_item.quantity_fulfilled:
+            if order_item.quantity_fulfilled is not None:
                 paid_quantity = order_item.quantity_fulfilled
             else:
                 paid_quantity = order_item.quantity
@@ -238,7 +238,8 @@ class OrdersManager:
             comment=cart.comment,
             user=cart.user,
             order_period=order_period,
-            delivery_location=delivery_location)
+            delivery_location=delivery_location,
+            transaction_cut_percent=csa.settings.CSA_TRANSACTION_CUT_PERCENT)
 
         # TODO: crazy db ops here
         for item in cart_items:

@@ -1,3 +1,4 @@
+import itertools
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from csa.models.core import Product
@@ -27,6 +28,7 @@ def index(request):
                 stock.cart_add_form = AddProductForm(
                     initial={'stock_id': stock.id})
 
+    products = sorted(products, key=lambda p: p.categories.all()[0])
     return render(request, 'products/index.html', {
         'products': products
     })

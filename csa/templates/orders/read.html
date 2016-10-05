@@ -6,7 +6,6 @@
 <div class="row">
   <ul>
     <li>Ημερομηνία καταχώρησης: {{ order.created_at }}</li>
-    <li>Σύνολο: {{ order.total_price|currency }}</li>
   </ul>
 </div>
 <div class="row">
@@ -26,7 +25,7 @@
       <td>{{ item.product_stock.product.name }}</td>
       <td>{{ item.product_stock.variety }}</td>
       <td>{{ item.product_stock.producer.get_full_name }}</td>
-      <td>{{ item.quantity }}</td>
+      <td>{{ item.quantity|floatformat }}</td>
       {% if item.quantity_fulfilled is not None %}
 	<td>{{ item.quantity_fulfilled }}</td>
       {% else %}
@@ -35,6 +34,14 @@
       <td>{{ item.total_price|currency }}</td>
     </tr>
     {% endfor %}
+    <tr>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td><strong>Σύνολο</strong></td>
+      <td><strong>{{ order.total_price|currency }}</strong></td>
+    </tr>
   </tbody>
 </table>
 {% endblock %}

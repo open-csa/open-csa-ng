@@ -23,11 +23,15 @@ class Transaction(models.Model):
     TYPE_BALANCE_DEPOSIT = 1
     TYPE_PRODUCTS_PURCHASE = 2
     TYPE_PRODUCTS_REFUND = 3
+    TYPE_TRANSACTION_CUT = 4
+    TYPE_TRANSACTION_CUT_REFUND = 5
 
     TYPES = (
         (TYPE_BALANCE_DEPOSIT, 'Balance Deposit'),
         (TYPE_PRODUCTS_PURCHASE, 'Products Purchase'),
-        (TYPE_PRODUCTS_REFUND, 'Products Refund')
+        (TYPE_PRODUCTS_REFUND, 'Products Refund'),
+        (TYPE_TRANSACTION_CUT, 'Transaction Cut'),
+        (TYPE_TRANSACTION_CUT_REFUND, 'Transaction Cut Refund'),
     )
 
     type = models.IntegerField(choices=TYPES)

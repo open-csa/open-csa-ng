@@ -1,6 +1,7 @@
 from csa.models.finance import Payment, PaymentByHand
 from csa.models.accounting import LedgerEntry, Account
 from csa.finance import transactions
+import csa.finance.utils
 
 
 def get_account_amount(user, account_type):
@@ -19,7 +20,11 @@ def get_account_amount(user, account_type):
 
 
 def get_user_balance(user):
-    return get_account_amount(user, Account.TYPE_LIABILITY_USER_BALANCE)
+    account = csa.finance.utils.get_user_account(
+        user,
+        Account.TYPE_LIABILITY_USER_BALANCE)
+
+    return csa.finance.utils.account_balance(account)
 
 
 def user_deposit_by_hand(user, amount):

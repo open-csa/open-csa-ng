@@ -8,7 +8,8 @@ from django.utils.safestring import mark_safe
 from related_admin import RelatedFieldAdmin as ModelAdmin
 from csa.finance.payments import get_user_balance
 import csa.models as m
-from csa import utils
+import csa.utils
+import csa.finance.utils
 
 
 admin.site.site_header = 'Διαχείρηση CSA'
@@ -85,7 +86,7 @@ class ProductStockAdmin(ModelAdmin):
         return product_stock.producer.get_full_name()
 
     def price_human_readable(self, product_stock):
-        return utils.human_readable_cents(product_stock.price)
+        return csa.utils.human_readable_cents(product_stock.price)
 
 
 class UserBaseModelAdmin(ModelAdmin):
@@ -98,7 +99,7 @@ class UserBaseModelAdmin(ModelAdmin):
 
     def balance(self, user):
         balance = get_user_balance(user.profile.user)
-        return utils.human_readable_cents(balance)
+        return csa.utils.human_readable_cents(balance)
 
     def user_full_name(self, user):
         return user.profile.user.get_full_name()
@@ -140,6 +141,7 @@ class OrderItem(ModelAdmin):
         'order_link',
         'product_stock_link',
         'quantity',
+        'quantity_fulfilled',
         'total_price',
         'created_at'
     )
@@ -180,8 +182,20 @@ class Transaction(ModelAdmin):
         'amount_currency')
 
     def amount_currency(self, transaction):
-        return utils.human_readable_cents(transaction.amount)
+        return csa.utils.human_readable_cents(transaction.amount)
 
+
+@admin.register(m.accounting.Account)
+class Account(ModelAdmin):
+    list_display = (
+        'id',
+        'type',
+        'user',
+        'balance')
+
+    def balance(self, account):
+        return csa.utils.human_readable_cents(
+            csa.finance.utils.account_balance(account))
 
 # register simple models
 for model in [

@@ -221,6 +221,7 @@ TEMPLATED_EMAIL_FILE_EXTENSION = 'j2.mail'
 CSA_DELIVERY_WEEKDAY = 4
 CSA_DELIVERY_TIME = 5
 CSA_EMAIL_FROM = 'noreply@open-csa-ng.herokuapp.com'
+CSA_TRANSACTION_CUT_PERCENT = 0.05
 
 BROKER_URL = 'django://'
 # CELERYBEAT_SCHEDULER = 'djcelery.schedulers.DatabaseScheduler'

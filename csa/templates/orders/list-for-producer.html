@@ -20,7 +20,7 @@
 	    <tr>
 	      <td>{{ order_item.product_stock.product.name }}</td>
 	      <td>{{ order_item.product_stock.variety }}</td>
-	      <td>{{ order_item.quantity }}</td>
+	      <td>{{ order_item.quantity|floatformat }}</td>
 	      <td>{{ order_item.created_at }}</td>
 	    </tr>
 	  {% endfor %}
