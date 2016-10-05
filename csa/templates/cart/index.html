@@ -37,6 +37,14 @@
 	      <td>{{ item.total_price|currency }}</td>
 	    </tr>
 	  {% endfor %}
+	    <tr>
+	      <td></td>
+	      <td></td>
+	      <td></td>
+	      <td></td>
+	      <td><strong>Σύνολο</strong></td>
+	      <td><strong>{{ cart.total_price|currency }}</strong></td>
+	      </tr>
 	</tbody>
       </table>
       <ul class="list-inline">
