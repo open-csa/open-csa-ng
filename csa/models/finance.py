@@ -1,10 +1,12 @@
 from django.db import models
 from csa.models.user import User
 from csa.models.accounting import Transaction
-from csa.models.base import CreatedUpdatedAtMixin
 
 
-class Payment(models.Model, CreatedUpdatedAtMixin):
+class Payment(models.Model):
+    class Meta:
+        ordering = ['-created_at']
+
     TYPE_DEPOSIT = 1
     TYPE_WITHDRAW = 2
     TYPES = (
@@ -31,6 +33,8 @@ class Payment(models.Model, CreatedUpdatedAtMixin):
     status = models.IntegerField(choices=STATUSES)
     method = models.IntegerField(choices=METHODS)
     type = models.IntegerField(choices=TYPES)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
 
 class PaymentByHand(models.Model):

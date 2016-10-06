@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% load bootstrap3 %}
+{% load tags %}
+
+{% block content %}
+  <div class="row">
+    {% if not payments %}
+      {% bootstrap_alert "Δεν έχετε πραγματοποιήσει καμία συναλλαγή." dismissable=false %}
+    {% else %}
+      <table class="table table-striped table-bordered table-hover">
+	<thead>
+	  <tr>
+	    <th>Κωδικός</th>
+	    <th>Ημερομηνία</th>
+	    <th>Είδος Συναλλαγής</th>
+	    <th>Ποσό</th>
+	</thead>
+	<tbody>
+	  {% for payment in payments %}
+	    <tr>
+	      <td>{{ payment.pk }}</td>
+	      <td>{{ payment.created_at }}</td>
+	      <td>{{ payment.get_type_display }}</td>
+	      <td>{{ payment.transaction.amount|currency }}</td>
+	    </tr>
+	  {% endfor %}
+	</tbody>
+      </table>
+    {% endif %}
+  </div>
+{% endblock %}

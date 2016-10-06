@@ -26,6 +26,7 @@ import csa.views.products
 import csa.views.cart
 import csa.views.user
 import csa.views.orders
+import csa.views.payments
 
 
 urlpatterns = [
@@ -61,5 +62,6 @@ urlpatterns = [
     url(r'^user/orders$', csa.views.orders.list, name='orders-list'),
     url(r'^user/orders-producer$',
         csa.views.orders.list_for_producer,
-        name='orders-producer')
+        name='orders-producer'),
+    url(r'^user/payments$', csa.views.payments.list, name='payments-list')
 ]
