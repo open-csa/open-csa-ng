@@ -50,6 +50,16 @@ def balance_deposit(user, amount):
         amount=amount)
 
 
+def balance_withdraw(user, amount):
+    return create_transaction(
+        type=m.accounting.Transaction.TYPE_BALANCE_WITHDRAW,
+        credit_user=csa.utils.get_company_user(),
+        credit_account_type=Account.TYPE_ASSET_BANK_ACCOUNT,
+        debit_user=user,
+        debit_account_type=Account.TYPE_LIABILITY_USER_BALANCE,
+        amount=amount)
+
+
 def products_purchase(order):
     # group order items by producer
     consumer = order.user
@@ -156,4 +166,4 @@ def order_item_fulfillment_changed(order_item, diff_quantity):
         credit_user=producer_cut_credit_user,
         credit_account_type=cut_credit_account,
         debit_user=producer_cut_debit_user,
-        debit_user_account=cut_debit_account)
+        debit_account_type=cut_debit_account)

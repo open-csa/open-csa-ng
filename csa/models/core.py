@@ -1,6 +1,7 @@
 from django.db import models
 from csa.models.user import User
 from csa.models.utils import CSACharField
+from csa.models.base import CreatedUpdatedAtMixin
 import csa.finance.utils
 
 # TODO: split this module into actual pieces
@@ -118,13 +119,11 @@ class OrderPeriod(models.Model):
             status=self.get_status_display())
 
 
-class CartAndOrderCommon(models.Model):
+class CartAndOrderCommon(models.Model, CreatedUpdatedAtMixin):
     class Meta:
         abstract = True
 
     comment = models.TextField(blank=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
 
     def total_price(self):
         return sum(item.total_price() for item in self.items.all())
@@ -147,14 +146,12 @@ class Order(CartAndOrderCommon):
         return 'Order(id={id})'.format(id=self.id)
 
 
-class CartAndOrderItem(models.Model):
+class CartAndOrderItem(models.Model, CreatedUpdatedAtMixin):
     class Meta:
         abstract = True
 
     product_stock = models.ForeignKey(ProductStock)
     quantity = models.FloatField()
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
 
 
 class CartItem(CartAndOrderItem):

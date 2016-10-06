@@ -102,20 +102,35 @@ class UserBaseModelAdmin(ModelAdmin):
         return csa.utils.human_readable_cents(balance)
 
     def user_full_name(self, user):
+        # do weird user.profile.user dance here
+        # user is either consumer or producer,
+        # so we go e.g. Consumer --> UserProfile --> User
         return user.profile.user.get_full_name()
 
 
+class UserBalanceWithdrawMixin:
+    def withdraw(self, request, queryset):
+        user = queryset.get().profile.user
+        return redirect('admin-user-withdraw-by-hand', user_id=user.id)
+
+
 @admin.register(m.user.Producer)
-class Producer(UserBaseModelAdmin):
-    pass
+class Producer(UserBaseModelAdmin, UserBalanceWithdrawMixin):
+    list_display = (
+        'user_full_name',
+        'profile__phone_number',
+        'profile__user__email',
+        'balance')
+
+    actions = ('withdraw',)
 
 
 @admin.register(m.user.Consumer)
-class Consumer(UserBaseModelAdmin):
-    actions = ['deposit_by_hand']
+class Consumer(UserBaseModelAdmin, UserBalanceWithdrawMixin):
+    actions = ['deposit_by_hand', 'withdraw']
 
     def deposit_by_hand(self, request, queryset):
-        user = queryset[0].profile.user
+        user = queryset.get().profile.user
         return redirect(
             'admin-user-deposit-by-hand',
             user_id=user.id)
@@ -189,13 +204,17 @@ class Transaction(ModelAdmin):
 class Account(ModelAdmin):
     list_display = (
         'id',
+        'user_full_name',
         'type',
-        'user',
         'balance')
 
     def balance(self, account):
         return csa.utils.human_readable_cents(
             csa.finance.utils.account_balance(account))
+
+    def user_full_name(self, account):
+        return account.user.get_full_name()
+
 
 # register simple models
 for model in [

@@ -1,0 +1,7 @@
+{% load tags %}
+
+{% block subject %}Ανάληψη {{ payment.payment.transaction.amount|currency }} από πορτοφόλι σας{% endblock %}
+{% block plain %}
+{# TODO: add link to user wallet #}
+Σας ευχαριστούμε!
+{% endblock %}

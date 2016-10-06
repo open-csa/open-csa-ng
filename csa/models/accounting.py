@@ -25,9 +25,11 @@ class Transaction(models.Model):
     TYPE_PRODUCTS_REFUND = 3
     TYPE_TRANSACTION_CUT = 4
     TYPE_TRANSACTION_CUT_REFUND = 5
+    TYPE_BALANCE_WITHDRAW = 6
 
     TYPES = (
         (TYPE_BALANCE_DEPOSIT, 'Balance Deposit'),
+        (TYPE_BALANCE_WITHDRAW, 'Balance Withdraw'),
         (TYPE_PRODUCTS_PURCHASE, 'Products Purchase'),
         (TYPE_PRODUCTS_REFUND, 'Products Refund'),
         (TYPE_TRANSACTION_CUT, 'Transaction Cut'),

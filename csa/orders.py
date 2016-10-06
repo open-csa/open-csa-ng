@@ -155,7 +155,10 @@ class OrdersManager:
                 transaction=transaction)
 
         # see if order_period needs to have status set to FINALIZED
-        unfulfilled_items = cls.get_unfulfilled_order_items(order_period_id)
+        unfulfilled_items = cls.get_order_items(
+            order_period_id,
+            fulfilled=False)
+
         if not unfulfilled_items:
             (m.core.OrderPeriod.objects
              .filter(id=order_period_id)
@@ -169,17 +172,20 @@ class OrdersManager:
         return m.core.OrderPeriod.objects.get(id=order_period_id)
 
     @classmethod
-    def get_unfulfilled_order_items(cls, order_period_id):
-        return (
+    def get_order_items(cls, order_period_id, fulfilled=True):
+        query = (
             m.core.OrderItem.objects
             .select_related('order')
             .select_related('product_stock')
             .select_related('product_stock__producer')
             .select_related('product_stock__product')
             .filter(order__order_period_id=order_period_id)
-            .filter(quantity_fulfilled__isnull=True)
-            .all()
         )
+
+        if not fulfilled:
+            query = query.filter(quantity_fulfilled__isnull=True)
+
+        return query.all()
 
     # TODO: this isn't used
     # @classmethod

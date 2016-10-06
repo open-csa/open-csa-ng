@@ -22,7 +22,7 @@
   <tbody>
     {% for item in order.items.all %}
     <tr>
-      <td>{{ item.product_stock.product.name }}</td>
+      <td><strong>{{ item.product_stock.product.name }}</strong></td>
       <td>{{ item.product_stock.variety }}</td>
       <td>{{ item.product_stock.producer.get_full_name }}</td>
       <td>{{ item.quantity|floatformat }}</td>

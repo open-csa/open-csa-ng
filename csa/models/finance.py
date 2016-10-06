@@ -1,14 +1,15 @@
 from django.db import models
 from csa.models.user import User
 from csa.models.accounting import Transaction
+from csa.models.base import CreatedUpdatedAtMixin
 
 
-class Payment(models.Model):
+class Payment(models.Model, CreatedUpdatedAtMixin):
     TYPE_DEPOSIT = 1
-    TYPE_WITHDRAWAL = 2
+    TYPE_WITHDRAW = 2
     TYPES = (
         (TYPE_DEPOSIT, 'Deposit'),
-        (TYPE_WITHDRAWAL, 'Widthdrawal')
+        (TYPE_WITHDRAW, 'Widthdraw')
     )
 
     STATUS_PENDING = 1

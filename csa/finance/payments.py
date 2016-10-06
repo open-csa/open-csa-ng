@@ -39,3 +39,16 @@ def user_deposit_by_hand(user, amount):
 
     payment_by_hand = PaymentByHand.objects.create(payment=payment)
     return payment_by_hand
+
+
+def user_withdraw_by_hand(user, amount):
+    transaction = transactions.balance_withdraw(user, amount)
+    payment = Payment.objects.create(
+        type=Payment.TYPE_WITHDRAW,
+        status=Payment.STATUS_COMPLETE,
+        method=Payment.METHOD_BY_HAND,
+        transaction=transaction,
+        user=user)
+
+    payment_by_hand = PaymentByHand.objects.create(payment=payment)
+    return payment_by_hand
