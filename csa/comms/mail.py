@@ -39,6 +39,12 @@ def send_balance_deposit_mail(user, payment):
     })
 
 
+def send_balance_withdraw_mail(user, payment):
+    return _send_templated_mail('user_balance_withdraw', user, {
+        'payment': payment
+    })
+
+
 def send_order_item_fulfillment_change_mail(
         user, order_item, paid_quantity, transaction):
     return _send_templated_mail('order_item_fulfillment_change', user, {

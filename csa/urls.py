@@ -26,6 +26,7 @@ import csa.views.products
 import csa.views.cart
 import csa.views.user
 import csa.views.orders
+import csa.views.payments
 
 
 urlpatterns = [
@@ -33,6 +34,9 @@ urlpatterns = [
     url(r'^admin/users/(?P<user_id>\d+)/deposit_by_hand',
         csa.views.admin.user.deposit_by_hand,
         name='admin-user-deposit-by-hand'),
+    url(r'^admin/users/(?P<user_id>\d+)/withdraw_by_hand',
+        csa.views.admin.user.withdraw_by_hand,
+        name='admin-user-withdraw-by-hand'),
     url(r'^admin/order_periods/(?P<order_period_id>\d+)/finalize',
         csa.views.admin.order_period.finalize,
         name='admin-order-period-finalize'),
@@ -58,5 +62,6 @@ urlpatterns = [
     url(r'^user/orders$', csa.views.orders.list, name='orders-list'),
     url(r'^user/orders-producer$',
         csa.views.orders.list_for_producer,
-        name='orders-producer')
+        name='orders-producer'),
+    url(r'^user/payments$', csa.views.payments.list, name='payments-list')
 ]

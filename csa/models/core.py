@@ -138,6 +138,9 @@ class Cart(CartAndOrderCommon):
 
 
 class Order(CartAndOrderCommon):
+    class Meta:
+        ordering = ['-created_at']
+
     user = models.ForeignKey(User)
     order_period = models.ForeignKey(OrderPeriod)
     delivery_location = models.ForeignKey(DeliveryLocation)

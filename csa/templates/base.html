@@ -74,6 +74,7 @@
 		  <ul class="dropdown-menu">
 		    <li><a href="{% url 'user-edit' %}">Επεξεργασία Προφίλ</a></li>
 		    <li><a href="{% url 'orders-list' %}">Οι παραγγελίες μου</a></li>
+		    <li><a href="{% url 'payments-list' %}">Οι Καταθέσεις μου</a></li>
 		    {% if user.is_superuser %}
 		      <li><a href="{% url 'admin:index' %}">Διαχείρηση</a></li>
 		    {% endif %}

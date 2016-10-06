@@ -69,11 +69,14 @@ def finalize(request, order_period_id):
 
             return redirect('admin:csa_orderperiod_changelist')
 
-    order_items = OrdersManager.get_unfulfilled_order_items(order_period_id)
+    order_items = OrdersManager.get_order_items(order_period_id)
 
     if not formset:
         formset_initial = [
-            {'order_item_id': order_item.id}
+            {
+                'order_item_id': order_item.id,
+                'quantity_fulfilled': order_item.quantity_fulfilled
+            }
             for order_item in order_items
         ]
 

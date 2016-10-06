@@ -4,11 +4,14 @@ from csa.models.accounting import Transaction
 
 
 class Payment(models.Model):
+    class Meta:
+        ordering = ['-created_at']
+
     TYPE_DEPOSIT = 1
-    TYPE_WITHDRAWAL = 2
+    TYPE_WITHDRAW = 2
     TYPES = (
         (TYPE_DEPOSIT, 'Deposit'),
-        (TYPE_WITHDRAWAL, 'Widthdrawal')
+        (TYPE_WITHDRAW, 'Widthdraw')
     )
 
     STATUS_PENDING = 1
@@ -30,6 +33,8 @@ class Payment(models.Model):
     status = models.IntegerField(choices=STATUSES)
     method = models.IntegerField(choices=METHODS)
     type = models.IntegerField(choices=TYPES)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
 
 class PaymentByHand(models.Model):
