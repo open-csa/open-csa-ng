@@ -63,6 +63,16 @@ Running `make` will:
 2. Install dependencies (including dev and test dependencies).
 3. Initialize the database.
 
+### Usual problems in installation
+
+#### pygraphviz
+
+You might experience some problems while installing `pygraphviz`, in this case
+most probably you are missing some of its dependencies. You should make sure then
+whether the following packages are installed on your system.
+* `python3-dev`
+* `graphviz`
+* `graphviz-dev`(or `libgraphviz-dev`, `graphviz-dev` will install it either way)
 
 ## How to run ##
 
