@@ -209,8 +209,15 @@ class Account(ModelAdmin):
         'balance')
 
     def balance(self, account):
+        if account.type in [
+                m.accounting.Account.TYPE_ASSET_CASH,
+        ]:
+            reverse = True
+        else:
+            reverse = False
+
         return csa.utils.human_readable_cents(
-            csa.finance.utils.account_balance(account))
+            csa.finance.utils.get_account_amount(account, reverse=True))
 
     def user_full_name(self, account):
         return account.user.get_full_name()
