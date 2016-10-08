@@ -186,7 +186,8 @@ class OrderPeriod(ModelAdmin):
     def finalize(self, request, queryset):
         return redirect(
             'admin-order-period-finalize',
-            order_period_id=queryset[0].id)
+            order_period_id=queryset.get().id)
+
 
 
 @admin.register(m.accounting.Transaction)
