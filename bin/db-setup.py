@@ -10,9 +10,6 @@ import csa.models as m  # noqa
 
 
 def test_data():
-    unit_kilo = m.core.ProductMeasureUnit.objects.create(name='κιλό')
-    unit_matso = m.core.ProductMeasureUnit.objects.create(name='μάτσο')
-    unit_bazaki = m.core.ProductMeasureUnit.objects.create(name='βαζάκι')
     category_laxanika = m.core.ProductCategory.objects.create(name='Λαχανικά')
     category_metapoiimena = m.core.ProductCategory.objects.create(name='Μεταποιημένα')
 
@@ -89,7 +86,7 @@ def test_data():
         'καλοκαιρινούς μήνες και σε θερμοκήπιο τον υπόλοιπο χρόνο, λόγω της '
         'ευαισθησίας στις χαμηλές θερμοκρασίες. Η υψηλή θερμοκρασία και υγρασία '
         'ευνοούν την ανάπτυξή της.',
-        unit=unit_kilo)
+        unit=m.core.Product.UNIT_WEIGHT)
     aggouri.categories.add(category_laxanika)
 
     aggouri_vasw = m.core.ProductStock.objects.create(
@@ -112,7 +109,7 @@ def test_data():
                     'σε ανασκαφές αρχαίων τάφων βαζάκια διαφόρων ειδών μαρμαλάδες. '
                     'Πέρα από την επάλυψη σε ζεστές φέτες ψωμιού το θεσπέσιο αυτό γλύκισμα '
                     'χρησιμοποιείται στη παρασκευή του αγαπημένου σε όλους γλυκό πάστα φλώρα!',
-        unit=unit_bazaki)
+        unit=m.core.Product.UNIT_WEIGHT)
     marmelada.categories.add(category_metapoiimena)
 
     marmelada_vasw = m.core.ProductStock.objects.create(
@@ -123,8 +120,14 @@ def test_data():
         is_available=True,
         is_stockable=True,
         quantity=8,
-        price=300)
+        price=300,
+        min_quantity=0.5)
     marmelada_vasw.supported_delivery_locations.add(da)
+
+    m.core.AvailableQuantity.objects.bulk_create([
+        m.core.AvailableQuantity(product_stock=marmelada_vasw, quantity=0.5),
+        m.core.AvailableQuantity(product_stock=marmelada_vasw, quantity=1)
+    ])
 
 parser = ArgumentParser(description='CSA database setup tool')
 parser.add_argument('--drop', action='store_true', help='drop tables')

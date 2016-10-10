@@ -44,19 +44,19 @@ class ProductCategory(models.Model):
         return self.id < other.id
 
 
-class ProductMeasureUnit(models.Model):
-    name = CSACharField()
-
-    def __str__(self):
-        return self.name
-
-
-# TODO: how to handle container size?
 class Product(models.Model):
+    UNIT_BUNCH = 1
+    UNIT_WEIGHT = 2
+
+    UNITS = (
+        (UNIT_BUNCH, 'Μάτσο'),
+        (UNIT_WEIGHT, 'Κιλό'),
+    )
+
     categories = models.ManyToManyField(ProductCategory)
     name = CSACharField(unique=True)
     description = models.TextField()
-    unit = models.ForeignKey(ProductMeasureUnit)
+    unit = models.IntegerField(choices=UNITS)
 
     def __str__(self):
         return self.name
@@ -72,6 +72,7 @@ class ProductStock(models.Model):
     producer = models.ForeignKey(User, on_delete=models.CASCADE)
     variety = CSACharField()
     price = models.PositiveIntegerField()
+    min_quantity = models.FloatField(null=True)
     # availability and stock related variables
     # default case, this item is available but not stockable
     is_available = models.BooleanField(default=True)
@@ -88,6 +89,13 @@ class ProductStock(models.Model):
         return self.price + csa.finance.utils.transaction_cut(
             amount=self.price,
             percent=percent)
+
+
+class AvailableQuantity(models.Model):
+    product_stock = models.ForeignKey(
+        ProductStock,
+        related_name='available_quantities')
+    quantity = models.FloatField()
 
 
 class OrderPeriod(models.Model):

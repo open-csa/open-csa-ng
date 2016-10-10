@@ -20,13 +20,16 @@ def index(request):
         for stock in product.stocks.all():
             # if the product is stockable create a form with limit
             # on the quantity
+            form_kwargs = {
+                'initial': {'stock_id': stock.id},
+                'min_quantity': stock.min_quantity,
+                'quantities': stock.available_quantities.all()
+            }
+
             if stock.is_stockable and stock.quantity > 0:
-                stock.cart_add_form = AddProductForm(
-                    max_limit=stock.quantity,
-                    initial={'stock_id': stock.id})
-            else:
-                stock.cart_add_form = AddProductForm(
-                    initial={'stock_id': stock.id})
+                form_kwargs['max_quantity'] = stock.quantity
+
+            stock.cart_add_form = AddProductForm(**form_kwargs)
 
     products = sorted(products, key=lambda p: p.categories.all()[0])
     return render(request, 'products/index.html', {
