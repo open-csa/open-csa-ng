@@ -92,6 +92,9 @@ class ProductStock(models.Model):
 
 
 class AvailableQuantity(models.Model):
+    class Meta:
+        unique_together = ('product_stock', 'quantity')
+
     product_stock = models.ForeignKey(
         ProductStock,
         related_name='available_quantities')
