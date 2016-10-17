@@ -3,6 +3,7 @@ from django.views.decorators.http import require_POST
 from django.shortcuts import redirect, render
 from django.db.models import F
 from django.contrib import messages
+from django.http import JsonResponse
 from csa.orders import OrdersManager
 from csa import models as m
 from csa import utils
@@ -24,6 +25,14 @@ def add(request):
     stock_id = int(request.POST['stock_id'])
     quantity = float(request.POST['quantity'])
     stock = m.core.ProductStock.objects.get(pk=stock_id)
+
+    if stock.min_quantity and quantity < stock.min_quantity:
+        raise Exception('requested quantity > min_quantity')
+
+    available_quantities = stock.available_quantities.all()
+    if available_quantities and quantity not in available_quantities:
+        raise Exception('quantity not one of the available quantities')
+
     cart = utils.get_user_cart(request.user.id)
     item, created = cart.items.get_or_create(
         product_stock=stock,
