@@ -3,7 +3,6 @@ from django.views.decorators.http import require_POST
 from django.shortcuts import redirect, render
 from django.db.models import F
 from django.contrib import messages
-from django.http import JsonResponse
 from csa.orders import OrdersManager
 from csa import models as m
 from csa import utils
