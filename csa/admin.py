@@ -188,7 +188,6 @@ class OrderPeriod(ModelAdmin):
             order_period_id=queryset.get().id)
 
 
-
 @admin.register(m.accounting.Transaction)
 class Transaction(ModelAdmin):
     list_display = (
@@ -217,7 +216,7 @@ class Account(ModelAdmin):
             reverse = False
 
         return csa.utils.human_readable_cents(
-            csa.finance.utils.get_account_amount(account, reverse=True))
+            csa.finance.utils.get_account_amount(account, reverse=reverse))
 
     def user_full_name(self, account):
         return account.user.get_full_name()
