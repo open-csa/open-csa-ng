@@ -222,6 +222,19 @@ class Account(ModelAdmin):
         return account.user.get_full_name()
 
 
+@admin.register(m.accounting.LedgerEntry)
+class LedgerEntry(ModelAdmin):
+    list_display = (
+        'id',
+        'transaction',
+        'type',
+        'reason',
+        'amount')
+
+    def amount_currency(self, ledger_entry):
+        return csa.utils.human_readable_cents(ledger_entry.amount)
+
+
 # register simple models
 for model in [
         m.core.DeliveryLocation,

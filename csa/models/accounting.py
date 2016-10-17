@@ -43,6 +43,7 @@ class Transaction(models.Model):
 class LedgerEntry(models.Model):
     class Meta:
         unique_together = (('transaction', 'account'))
+        verbose_name_plural = 'Ledger Entries'
 
     TYPE_DEBIT = 1
     TYPE_CREDIT = 2
