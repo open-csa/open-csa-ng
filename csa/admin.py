@@ -1,4 +1,3 @@
-import locale
 from urllib.parse import urlencode
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
