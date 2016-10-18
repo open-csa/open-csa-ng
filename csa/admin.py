@@ -192,6 +192,7 @@ class OrderPeriod(ModelAdmin):
             'admin-order-period-list-orders',
             order_period_id=queryset.get().id)
 
+
 @admin.register(m.accounting.Transaction)
 class Transaction(ModelAdmin):
     list_display = (
