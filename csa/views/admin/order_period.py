@@ -1,10 +1,13 @@
+import itertools
 from django import forms
 from django.shortcuts import render, redirect
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib import messages
+from django.db.models.query import Prefetch
 import csa.models as m
 from csa.orders import OrdersManager
 from csa import utils
+from csa.finance.payments import get_user_balance
 
 
 class FinalizeOrderItemForm(forms.Form):
@@ -95,9 +98,43 @@ def finalize(request, order_period_id):
 
         producer_order_items[producer].append(order_item)
 
-    return render(request, 'admin/order_item/finalize.html', {
+    return render(request, 'admin/order_period/finalize.html', {
         'producer_order_items': producer_order_items,
         'formset': formset
+    })
+
+
+@staff_member_required
+def list_orders(request, order_period_id):
+    order_items = (
+        m.core.OrderItem.objects
+        .select_related('product_stock')
+        .select_related('product_stock__producer')
+        .select_related('product_stock__product')
+        .select_related('order')
+        .select_related('order__user')
+        .filter(order__order_period_id=order_period_id)
+        .order_by('product_stock__producer')
+        .all()
+    )
+
+    # django doesn't like generators
+    order_items_by_producer = {
+        producer: list(order_items)
+        for producer, order_items in itertools.groupby(
+                order_items,
+                key=lambda o: o.product_stock.producer)
+    }
+
+    consumers = set(order_item.order.user for order_item in order_items)
+    balance_by_user = {
+        consumer: get_user_balance(consumer)
+        for consumer in consumers
+    }
+
+    return render(request, 'admin/order_period/list_orders.html', {
+        'order_items_by_producer': order_items_by_producer,
+        'balance_by_user': balance_by_user
     })
 
 

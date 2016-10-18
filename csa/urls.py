@@ -40,6 +40,9 @@ urlpatterns = [
     url(r'^admin/order_periods/(?P<order_period_id>\d+)/finalize',
         csa.views.admin.order_period.finalize,
         name='admin-order-period-finalize'),
+    url(r'^admin/order_periods/(?P<order_period_id>\d+)/list_orders',
+        csa.views.admin.order_period.list_orders,
+        name='admin-order-period-list-orders'),
     url(r'^user/register/$',
         RegistrationView.as_view(
             form_class=csa.forms.access.RegistrationForm

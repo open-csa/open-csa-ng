@@ -175,7 +175,7 @@ class OrderPeriod(ModelAdmin):
         'ends_at',
         'delivery_location_link',
         'status')
-    actions = ('finalize',)
+    actions = ('finalize', 'list_orders')
 
     delivery_location_link = foreign_key_link(
         'deliverylocation',
@@ -187,6 +187,10 @@ class OrderPeriod(ModelAdmin):
             'admin-order-period-finalize',
             order_period_id=queryset.get().id)
 
+    def list_orders(self, request, queryset):
+        return redirect(
+            'admin-order-period-list-orders',
+            order_period_id=queryset.get().id)
 
 @admin.register(m.accounting.Transaction)
 class Transaction(ModelAdmin):
