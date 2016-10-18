@@ -85,21 +85,21 @@ def finalize(request, order_period_id):
 
         formset = FinalizeOrderItemFormSet(initial=formset_initial)
 
-    # group by producer
+    # group by consumer
     # can't do defaultdict here because jinja doesn't like them
     # noqa see http://stackoverflow.com/questions/4764110/django-template-cant-loop-defaultdict
-    producer_order_items = {}
+    order_items_by_consumer = {}
     for order_item, form in zip(order_items, formset):
-        producer = order_item.product_stock.producer
+        consumer = order_item.order.user
         order_item.form = form
 
-        if producer not in producer_order_items:
-            producer_order_items[producer] = []
+        if consumer not in order_items_by_consumer:
+            order_items_by_consumer[consumer] = []
 
-        producer_order_items[producer].append(order_item)
+        order_items_by_consumer[consumer].append(order_item)
 
     return render(request, 'admin/order_period/finalize.html', {
-        'producer_order_items': producer_order_items,
+        'order_items_by_consumer': order_items_by_consumer,
         'formset': formset
     })
 
