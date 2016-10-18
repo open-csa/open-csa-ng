@@ -1,4 +1,3 @@
-import locale
 from urllib.parse import urlencode
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
@@ -176,7 +175,7 @@ class OrderPeriod(ModelAdmin):
         'ends_at',
         'delivery_location_link',
         'status')
-    actions = ('finalize',)
+    actions = ('finalize', 'list_orders')
 
     delivery_location_link = foreign_key_link(
         'deliverylocation',
@@ -186,7 +185,12 @@ class OrderPeriod(ModelAdmin):
     def finalize(self, request, queryset):
         return redirect(
             'admin-order-period-finalize',
-            order_period_id=queryset[0].id)
+            order_period_id=queryset.get().id)
+
+    def list_orders(self, request, queryset):
+        return redirect(
+            'admin-order-period-list-orders',
+            order_period_id=queryset.get().id)
 
 
 @admin.register(m.accounting.Transaction)
@@ -209,11 +213,31 @@ class Account(ModelAdmin):
         'balance')
 
     def balance(self, account):
+        if account.type in [
+                m.accounting.Account.TYPE_ASSET_CASH,
+        ]:
+            reverse = True
+        else:
+            reverse = False
+
         return csa.utils.human_readable_cents(
-            csa.finance.utils.account_balance(account))
+            csa.finance.utils.get_account_amount(account, reverse=reverse))
 
     def user_full_name(self, account):
         return account.user.get_full_name()
+
+
+@admin.register(m.accounting.LedgerEntry)
+class LedgerEntry(ModelAdmin):
+    list_display = (
+        'id',
+        'transaction',
+        'type',
+        'reason',
+        'amount')
+
+    def amount_currency(self, ledger_entry):
+        return csa.utils.human_readable_cents(ledger_entry.amount)
 
 
 # register simple models

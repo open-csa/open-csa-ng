@@ -139,13 +139,16 @@ class OrdersManager:
             order_item.quantity_fulfilled = quantity_fulfilled
             order_item.save()
 
-            diff_quantity = quantity_fulfilled - paid_quantity
-            if diff_quantity == 0:
+            quantity_diff = quantity_fulfilled - paid_quantity
+            if quantity_diff == 0:
                 continue
 
-            transaction = transactions.order_item_fulfillment_changed(
+            amount_uncut = abs(quantity_diff) * order_item.product_stock_price
+            is_refund = quantity_diff < 0
+            transaction = transactions.products_purchase_order_item(
                 order_item,
-                diff_quantity)
+                amount_uncut,
+                is_refund)
 
             # send email too
             csa.comms.mail.send_order_item_fulfillment_change_mail(

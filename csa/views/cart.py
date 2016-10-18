@@ -3,7 +3,6 @@ from django.views.decorators.http import require_POST
 from django.shortcuts import redirect, render
 from django.db.models import F
 from django.contrib import messages
-from django.http import JsonResponse
 from csa.orders import OrdersManager
 from csa import models as m
 from csa import utils
@@ -29,7 +28,11 @@ def add(request):
     if stock.min_quantity and quantity < stock.min_quantity:
         raise Exception('requested quantity > min_quantity')
 
-    available_quantities = stock.available_quantities.all()
+    available_quantities = [
+        available_quantity.quantity
+        for available_quantity in stock.available_quantities.all()
+    ]
+
     if available_quantities and quantity not in available_quantities:
         raise Exception('quantity not one of the available quantities')
 

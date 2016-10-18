@@ -1,3 +1,5 @@
+import operator
+from csa.finance import transactions
 import csa.settings
 from csa.models.accounting import LedgerEntry, Account
 
@@ -15,18 +17,30 @@ def transaction_cut(amount, _round=False, percent=None):
     return amount
 
 
-def account_balance(account):
-    balance = 0
+def get_account_amount(account, reverse=False):
+    amount = 0
+
+    if reverse:
+        debit_op = operator.add
+        credit_op = operator.sub
+    else:
+        debit_op = operator.sub
+        credit_op = operator.add
 
     for entry in LedgerEntry.objects.filter(account=account):
         if entry.type == LedgerEntry.TYPE_DEBIT:
-            balance -= entry.amount
+            amount = debit_op(amount, entry.amount)
         elif entry.type == LedgerEntry.TYPE_CREDIT:
-            balance += entry.amount
+            amount = credit_op(amount, entry.amount)
         else:
             raise Exception
 
-    return balance
+    return amount
+
+
+def get_user_account_amount(user, account_type, reverse=False):
+    account = get_user_account(user, account_type)
+    return get_account_amount(account, reverse)
 
 
 def get_user_account(user, account_type):

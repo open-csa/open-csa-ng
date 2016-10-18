@@ -1,0 +1,49 @@
+{% extends "admin/base_site.html" %}
+{% load tags %}
+
+{% block content %}
+  {% for producer, order_items in order_items_by_producer.items %}
+    <h2>{{ producer.get_full_name }}</h2>
+    <table class="table table-bordered table-striped">
+      <thead>
+	<tr>
+	  <th>Προϊόν</th>
+	  <th>Ποικιλία</th>
+	  <th>Καταναλωτής</th>
+	  <th>Ποσότητα</th>
+	  <th>Παραδοτέα Ποσότητα</th>
+	</tr>
+      </thead>
+      <tbody>
+
+	{% for order_item in order_items %}
+	  <tr>
+	    <td>{{ order_item.product_stock.product.name }}</td>
+	    <td>{{ order_item.product_stock.variety }}</td>
+	    <td>{{ order_item.order.user.get_full_name }}</td>
+	    <td>{{ order_item.quantity|floatformat }}</td>
+	    <td><input></td>
+	  </tr>
+	{% endfor %}
+      </tbody>
+    </table>
+  {% endfor %}
+  <hr>
+  <h1>Πορτοφόλια Καταναλωτών</h1>
+  <table class="table table-bordered table-striped">
+    <thead>
+      <tr>
+	<th>Καταναλωτής</th>
+	<th>Πορτοφόλι</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for consumer, balance in balance_by_user.items %}
+	<tr>
+	  <td>{{ consumer.get_full_name }}</td>
+	  <td>{{ balance|currency }}</td>
+	</tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}

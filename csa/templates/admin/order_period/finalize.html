@@ -1,37 +1,39 @@
 {% extends "admin/base_site.html" %}
+{% load bootstrap3 %}
+{% load tags %}
 
 {% block content %}
   <form method="POST">
     {% csrf_token %}
     {{ formset.management_form }}
-    {% for producer, order_items in producer_order_items.items %}
-      <div>
-	<h1>{{ producer.get_full_name }}</h1>
-	<table>
+    {% for consumer, order_items in order_items_by_consumer.items %}
+	<h2>{{consumer.get_full_name }} ({{consumer| balance }})</h2>
+	<table class="table table-bordered table-striped">
 	  <thead>
 	    <tr>
 	      <th>Προϊόν</th>
 	      <th>Ποικιλία</th>
-	      <th>Καταναλωτής</th>
+	      <th>Παραγωγός</th>
 	      <th>Ποσότητα</th>
 	      <th>Παραδοτέα Ποσότητα</th>
 	    </tr>
 	  </thead>
 	  <tbody>
-
 	    {% for order_item in order_items %}
 	      <tr>
 		<td>{{ order_item.product_stock.product.name }}</td>
 		<td>{{ order_item.product_stock.variety }}</td>
-		<td>{{ order_item.order.user.get_full_name }}</td>
+		<td>{{ order_item.product_stock.producer.get_full_name }}</td>
 		<td>{{ order_item.quantity|floatformat }}</td>
-		<td>{{ order_item.form.as_p }}</td>
+		<td>
+		  {% bootstrap_form order_item.form layout='inline' %}
+		  {# {{ order_item.form.as_p }} #}
+		</td>
 	      </tr>
 	    {% endfor %}
 	  </tbody>
 	</table>
-      </div>
     {% endfor %}
-    <input type="submit">
+    {% bootstrap_button "Υποβολή" button_type=submit button_class="btn-primary" %}
   </form>
 {% endblock %}

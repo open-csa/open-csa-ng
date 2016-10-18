@@ -3,6 +3,7 @@ from django import template
 from django.core.urlresolvers import reverse
 from csa import utils
 import csa.settings
+from csa.finance.payments import get_user_balance
 
 
 register = template.Library()
@@ -25,3 +26,8 @@ def currency(value):
 @register.simple_tag()
 def absurl(view_name, *args, **kwargs):
     return csa.settings.SITE_URL + reverse(view_name, args=args, kwargs=kwargs)
+
+
+@register.filter()
+def balance(user):
+    return currency(get_user_balance(user))
