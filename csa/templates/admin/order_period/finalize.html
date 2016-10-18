@@ -1,4 +1,5 @@
 {% extends "admin/base_site.html" %}
+{% load bootstrap3 %}
 {% load tags %}
 
 {% block content %}
@@ -6,9 +7,8 @@
     {% csrf_token %}
     {{ formset.management_form }}
     {% for consumer, order_items in order_items_by_consumer.items %}
-      <div>
-	<h1>{{consumer.get_full_name }} ({{consumer| balance }})</h1>
-	<table>
+	<h2>{{consumer.get_full_name }} ({{consumer| balance }})</h2>
+	<table class="table table-bordered table-striped">
 	  <thead>
 	    <tr>
 	      <th>Προϊόν</th>
@@ -19,21 +19,21 @@
 	    </tr>
 	  </thead>
 	  <tbody>
-
 	    {% for order_item in order_items %}
 	      <tr>
 		<td>{{ order_item.product_stock.product.name }}</td>
 		<td>{{ order_item.product_stock.variety }}</td>
 		<td>{{ order_item.product_stock.producer.get_full_name }}</td>
 		<td>{{ order_item.quantity|floatformat }}</td>
-		<td>{{ order_item.form.as_p }}</td>
+		<td>
+		  {% bootstrap_form order_item.form layout='inline' %}
+		  {# {{ order_item.form.as_p }} #}
+		</td>
 	      </tr>
 	    {% endfor %}
 	  </tbody>
 	</table>
-      </div>
     {% endfor %}
-
-    <p><input value="Υποβολή" type="submit"></p>
+    {% bootstrap_button "Υποβολή" button_type=submit button_class="btn-primary" %}
   </form>
 {% endblock %}

@@ -1,12 +1,12 @@
 {% extends "admin/base_site.html" %}
-
+{% load bootstrap3 %}
 {% block content %}
 <p>The {{ payment_type }} will be applied to: {{ user.get_full_name }}</p>
 <div>
 <form action="" method="post">
     {% csrf_token %}
-    {{ form }}
-    <input type="submit">
+    {% bootstrap_form form %}
+    {% bootstrap_button "Κατάθεση" button_type=submit button_class="btn-primary" %}
 </form>
 </div>
 {% endblock %}

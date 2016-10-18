@@ -87,6 +87,8 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 INSTALLED_APPS = [
     # builtin
+    # third party but always before django.contrib.admin
+    'bootstrap_admin',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -234,3 +236,5 @@ CELERYBEAT_SCHEDULE = {
         'schedule': crontab(minute='*/5')
     }
 }
+
+BOOTSTRAP_ADMIN_SIDEBAR_MENU = True

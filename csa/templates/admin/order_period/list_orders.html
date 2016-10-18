@@ -3,8 +3,8 @@
 
 {% block content %}
   {% for producer, order_items in order_items_by_producer.items %}
-    <h1>{{ producer.get_full_name }}</h1>
-    <table>
+    <h2>{{ producer.get_full_name }}</h2>
+    <table class="table table-bordered table-striped">
       <thead>
 	<tr>
 	  <th>Προϊόν</th>
@@ -27,15 +27,10 @@
 	{% endfor %}
       </tbody>
     </table>
-    {# dirty way to insert vertical space #}
-    <p></p>
   {% endfor %}
-
-  {# dirty way to insert vertical space #}
-  <p></p>
-
+  <hr>
   <h1>Πορτοφόλια Καταναλωτών</h1>
-  <table>
+  <table class="table table-bordered table-striped">
     <thead>
       <tr>
 	<th>Καταναλωτής</th>

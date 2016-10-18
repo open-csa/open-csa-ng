@@ -10,6 +10,7 @@ django-celery
 python-dateutil
 pytz
 whitenoise
+bootstrap-admin
 
 # for graph_models
 # TODO: put this in -dev when we figure out how to split settings file
