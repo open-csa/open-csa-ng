@@ -139,7 +139,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'csa.contexts.user_balance'
+                'csa.contexts.user_balance',
+                'csa.contexts.registration_moderation',
             ],
         },
     },
@@ -219,11 +220,20 @@ BOOTSTRAP3 = {
 # templated emails
 TEMPLATED_EMAIL_FILE_EXTENSION = 'j2.mail'
 
+EMAIL_SUBJECT_PREFIX = ''
+DEFAULT_FROM_EMAIL = 'noreply@open-csa-ng.herokuapp.com'
+SERVER_EMAIL = DEFAULT_FROM_EMAIL
+
+# this is merely list of users who get critical error emails by django
+ADMINS = [('Dan Milon', 'i@danmilon.me')]
+MANAGERS = ADMINS
+
 # csa-specific
 CSA_DELIVERY_WEEKDAY = 4
 CSA_DELIVERY_TIME = 5
-CSA_EMAIL_FROM = 'noreply@open-csa-ng.herokuapp.com'
+CSA_EMAIL_FROM = DEFAULT_FROM_EMAIL
 CSA_TRANSACTION_CUT_PERCENT = 0.05
+CSA_USER_REGISTRATION_MODERATION = True
 
 BROKER_URL = 'django://'
 # CELERYBEAT_SCHEDULER = 'djcelery.schedulers.DatabaseScheduler'

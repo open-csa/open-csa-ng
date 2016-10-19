@@ -16,8 +16,6 @@ Including another URLconf
 from django.conf.urls import url, include
 from django.contrib import admin
 
-from registration.backends.hmac.views import RegistrationView
-
 import csa.views
 import csa.forms.access
 import csa.views.admin.user
@@ -44,7 +42,7 @@ urlpatterns = [
         csa.views.admin.order_period.list_orders,
         name='admin-order-period-list-orders'),
     url(r'^user/register/$',
-        RegistrationView.as_view(
+        csa.views.user.CSARegistrationView.as_view(
             form_class=csa.forms.access.RegistrationForm
         ),
         name='user-register'),
