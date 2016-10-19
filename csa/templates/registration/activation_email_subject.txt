@@ -1,1 +1,5 @@
+{% if CSA_USER_REGISTRATION_MODERATION %}
+Σύντομα θα είμαστε μαζί!
+{% else %}
 Καλωσήλθες στην οικογένοια του CSA
+{% endif %}
