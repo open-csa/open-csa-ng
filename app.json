@@ -4,14 +4,14 @@
     "env": {
 	"CSA_ENVIRONMENT": "production",
 	"DJANGO_SECRET_KEY": "not-the-production-secret",
+	"DATABASE_URL": {
+	    "required": true
+	},
 	"SENDGRID_USERNAME": {
-	    "description": "the username for sendgrid"
+	    "required": true
 	},
 	"SENDGRID_PASSWORD": {
-	    "description": "thep assword for sendgrid"
-	},
-	"LANG": {
-	    "description": "LANG env variable"
+	    "required": true
 	}
     },
     "formation": {
@@ -20,7 +20,8 @@
 	}
     },
     "addons": [
-	"heroku-postgresql"
+	"heroku-postgresql",
+	"sendgrid"
     ],
     "buildpacks": [
 	{
