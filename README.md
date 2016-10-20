@@ -35,7 +35,6 @@ the VM.
 * `python3`
 * `virtualenv`
 * `make`
-* `sqlite3` (temporarily, until we get a dedicated db)
 * `pkg-config`
 
 These are the names of the packages for debian and possibly ubuntu.

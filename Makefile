@@ -33,7 +33,6 @@ run-dev:
 # drop existing tables, creates new ones, and insert test data
 # TODO: don't do this when we release 1.0!
 db-reset:
-	rm -rf csa/migrations
 	. venv/bin/activate && python ./bin/db-setup.py --drop --init --test-data
 
 pep8:
@@ -46,4 +45,4 @@ autopep8:
 		    xargs autopep8 -j 0 --in-place
 
 clean:
-	rm -rf venv csa.egg-info db.sqlite3
+	rm -rf venv csa.egg-info

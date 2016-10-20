@@ -5,9 +5,11 @@ django-phonenumber-field
 django-related-admin
 django-widget-tweaks
 django-templated-email
+dj-database-url
 celery
 django-celery
 python-dateutil
 pytz
 whitenoise
 bootstrap-admin
+psycopg2

@@ -14,6 +14,8 @@ import os
 import sys
 import djcelery
 from celery.schedules import crontab
+import dj_database_url
+
 
 csa_env = os.getenv('CSA_ENVIRONMENT')
 if csa_env is None:
@@ -42,9 +44,23 @@ if csa_env == 'production':
     # We'll get our own domain eventually
     ALLOWED_HOSTS = ('.herokuapp.com',)
     SITE_URL = 'https://open-csa-ng.herokuapp.com'
+    # this picks the database from DATABASE_URL
+    DATABASES = {
+        'default': dj_database_url.config()
+    }
 elif csa_env == 'development':
     # development specific
     EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': 'csa',
+            'USER': 'csa',
+            'PASSWORD': 'p4ssw0rd',
+            'HOST': '127.0.0.1',
+            'PORT': '5432',
+        }
+    }
 elif csa_env == 'test':
     # test specific
     EMAIL_BACKEND = 'django.core.mail.backends.locmem.EmailBackend'
@@ -57,6 +73,13 @@ if csa_env in ('development', 'test'):
     SITE_URL = 'http://localhost:8000'
     SECRET_KEY = 'q_4b3b3nwm*$eu9l()w&@og2(o$*06c(rfvv!)$(5vm#ec2-lq'
     DEBUG = True
+
+# regardless of environment, we need this
+DATABASES['default'].update({
+    'CONN_MAX_AGE': 60,
+    'ATOMIC_REQUESTS': True
+})
+
 
 # silly heroku won't pick up logs from stderr
 LOGGING = {
@@ -147,15 +170,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'csa.wsgi.application'
-
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-        'ATOMIC_REQUESTS': True
-    }
-}
 
 
 # Password validation
