@@ -37,8 +37,6 @@ the VM.
 * `make`
 * `sqlite3` (temporarily, until we get a dedicated db)
 * `pkg-config`
-* `graphviz`
-* `libgraphviz-dev`
 
 These are the names of the packages for debian and possibly ubuntu.
 
@@ -73,7 +71,3 @@ $ CSA_ENVIRONMENT=development make run-dev
 ```
 
 See `bin/db-setup.py` for builtin data for testing.
-
-## Other ##
-
-See folder `docs/` for some documentation, guidelines, and a nice models graph!

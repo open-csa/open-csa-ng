@@ -45,9 +45,5 @@ autopep8:
 		find ${SOURCE_FOLDERS} -name "*.py" | \
 		    xargs autopep8 -j 0 --in-place
 
-models-graph:
-	. venv/bin/activate && \
-		python ./manage.py graph_models csa -g -o models-graph.png
-
 clean:
 	rm -rf venv csa.egg-info db.sqlite3
