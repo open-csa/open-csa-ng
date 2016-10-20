@@ -26,14 +26,14 @@ venv:
 test:
 	. venv/bin/activate && python -m unittest -v ${TEST_ARGS}
 
+# set LANG for variable localization (currency sign etc)
 run-dev:
-	# set LANG for variable localization (currency sign etc)
 	. venv/bin/activate && LANG=el_GR.utf8 python ./manage.py runserver 0.0.0.0:8000
 
 # drop existing tables, creates new ones, and insert test data
+# TODO: don't do this when we release 1.0!
 db-reset:
-	# TODO: don't do this when we release 1.0!
-	rm -rf csa/migrations db.sqlite3
+	rm -rf csa/migrations
 	. venv/bin/activate && python ./bin/db-setup.py --drop --init --test-data
 
 pep8:
