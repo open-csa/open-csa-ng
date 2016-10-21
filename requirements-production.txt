@@ -13,3 +13,4 @@ pytz
 whitenoise
 bootstrap-admin
 psycopg2
+gunicorn
