@@ -134,9 +134,6 @@ INSTALLED_APPS = [
     'csa'
 ]
 
-if csa_env in ('development', 'test'):
-    INSTALLED_APPS.append('django_extensions')
-
 
 MIDDLEWARE_CLASSES = [
     'django.middleware.security.SecurityMiddleware',
