@@ -1,0 +1,2 @@
+make deps-no-venv
+python manage.py collectstatic --noinput
