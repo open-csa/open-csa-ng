@@ -1,6 +1,7 @@
 # used to differentiate between different environments
 # for example used in the deps target to install the appropriate dependencies.
 CSA_ENVIRONMENT ?= production
+export CSA_ENVIRONMENT
 
 .PHONY: deps print-info test db-reset pep8 autopep8
 
