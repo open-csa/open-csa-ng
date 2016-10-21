@@ -3,3 +3,8 @@ python:
   - "3.5"
 install: CSA_ENVIRONMENT=test make
 script: make pep8
+services:
+  - postgresql
+before_script:
+  - psql -U postgres -c 'create user csa password csa;'
+  - psql -c 'create database csa OWNER csa;' -U postgres
