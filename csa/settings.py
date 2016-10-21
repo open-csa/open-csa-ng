@@ -24,6 +24,11 @@ if csa_env is None:
         'Needs to be one of production, development, test')
     sys.exit()
 
+# this picks the database from DATABASE_URL
+DATABASES = {
+    'default': dj_database_url.config()
+}
+
 if csa_env == 'production':
     # production specific
     # let's be explicit about this one
@@ -44,23 +49,9 @@ if csa_env == 'production':
     # We'll get our own domain eventually
     ALLOWED_HOSTS = ('.herokuapp.com',)
     SITE_URL = 'https://open-csa-ng.herokuapp.com'
-    # this picks the database from DATABASE_URL
-    DATABASES = {
-        'default': dj_database_url.config()
-    }
 elif csa_env == 'development':
     # development specific
     EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.postgresql',
-            'NAME': 'csa',
-            'USER': 'csa',
-            'PASSWORD': 'p4ssw0rd',
-            'HOST': '127.0.0.1',
-            'PORT': '5432',
-        }
-    }
 elif csa_env == 'test':
     # test specific
     EMAIL_BACKEND = 'django.core.mail.backends.locmem.EmailBackend'
@@ -73,6 +64,17 @@ if csa_env in ('development', 'test'):
     SITE_URL = 'http://localhost:8000'
     SECRET_KEY = 'q_4b3b3nwm*$eu9l()w&@og2(o$*06c(rfvv!)$(5vm#ec2-lq'
     DEBUG = True
+    # if not filled up by DATABASE_URL, default to local
+    if not DATABASES['default']:
+        DATABASES['default'] = {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': 'csa',
+            'USER': 'csa',
+            'PASSWORD': 'p4ssw0rd',
+            'HOST': '127.0.0.1',
+            'PORT': '5432',
+        }
+
 
 # regardless of environment, we need this
 DATABASES['default'].update({
