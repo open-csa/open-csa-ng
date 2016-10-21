@@ -2,7 +2,7 @@
     "name": "open-csa-ng",
     "scripts": {},
     "env": {
-	"CSA_ENVIRONMENT": "production",
+	"CSA_ENVIRONMENT": "development",
 	"DJANGO_SECRET_KEY": "not-the-production-secret",
 	"DATABASE_URL": {
 	    "required": true
