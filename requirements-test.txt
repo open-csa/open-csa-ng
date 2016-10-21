@@ -1,4 +1,4 @@
--r requirements-production.txt
+-r requirements-development.txt
 pep8
 autopep8
 freezegun
