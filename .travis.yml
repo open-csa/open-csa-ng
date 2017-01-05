@@ -6,5 +6,7 @@ script: make pep8
 services:
   - postgresql
 before_script:
-  - psql -U postgres -c 'create user csa password csa;'
-  - psql -c 'create database csa OWNER csa;' -U postgres
+  - sed -i /etc/locale.gen -e 's/# el_GR.UTF-8 UTF-8/el_GR.UTF-8 UTF-8/'
+  - dpkg-reconfigure -f noninteractive locales
+  - psql -U postgres -c 'create user csa password p4ssw0rd;'
+  - psql -U postgres -c 'create database csa TEMPLATE template0 ENCODING UTF8 LC_COLLATE el_GR.utf8 LC_CTYPE el_GR.utf8 OWNER csa;'
