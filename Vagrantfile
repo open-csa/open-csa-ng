@@ -66,6 +66,8 @@ Vagrant.configure("2") do |config|
   # Puppet, Chef, Ansible, Salt, and Docker are also available. Please see the
   # documentation for more information about their specific syntax and use.
   config.vm.provision "shell", inline: <<-SHELL
+  set -xe
+
   # enable el_GR locale
   sed -i /etc/locale.gen -e 's/# el_GR.UTF-8 UTF-8/el_GR.UTF-8 UTF-8/'
   dpkg-reconfigure -f noninteractive locales
