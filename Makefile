@@ -3,6 +3,10 @@
 CSA_ENVIRONMENT ?= production
 export CSA_ENVIRONMENT
 
+# set LANG for variable localization (currency sign etc)
+LANG=el_GR.utf8
+export LANG
+
 .PHONY: deps print-info test db-reset pep8 autopep8
 
 # if make is run without any target, it runs the first one
@@ -30,9 +34,8 @@ venv:
 test:
 	. venv/bin/activate && python -m unittest -v ${TEST_ARGS}
 
-# set LANG for variable localization (currency sign etc)
 run-dev:
-	. venv/bin/activate && LANG=el_GR.utf8 python ./manage.py runserver 0.0.0.0:8000
+	. venv/bin/activate && python ./manage.py runserver 0.0.0.0:8000
 
 # drop existing tables, creates new ones, and insert test data
 # TODO: don't do this when we release 1.0!
