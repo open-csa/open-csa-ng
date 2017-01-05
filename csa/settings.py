@@ -129,8 +129,6 @@ INSTALLED_APPS = [
     'bootstrap3',
     'related_admin',
     'widget_tweaks',
-    'kombu.transport.django',
-    'djcelery',
 
     # our own
     'csa'
