@@ -73,12 +73,17 @@ Vagrant.configure("2") do |config|
   dpkg-reconfigure -f noninteractive locales
   apt-get update
   # sqlite3: we won't need this when we get a real DB
-  # python3-dev graphviz libgraphviz-dev pkg-config python3-dev for graphviz
   # git for local development
-  apt-get install -y python3 virtualenv make \
+  apt-get install -y \
+    python3 \
+    virtualenv \
+    make \
     sqlite3 \
-    python3-dev graphviz libgraphviz-dev pkg-config python3-dev \
-    git
+    python3-dev \
+    git \
+    postgresql-9.4 \
+    postgresql-server-dev-9.4
+
   cd open-csa-ng
   CSA_ENVIRONMENT=development make clean
   CSA_ENVIRONMENT=development make
