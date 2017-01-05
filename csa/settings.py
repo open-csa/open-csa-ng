@@ -84,19 +84,21 @@ DATABASES['default'].update({
 
 
 # silly heroku won't pick up logs from stderr
+log_level = os.getenv('LOG_LEVEL', 'INFO')
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
     'handlers': {
         'console': {
             'class': 'logging.StreamHandler',
+            'level': log_level,
             'stream': sys.stdout
         },
     },
     'loggers': {
         'django': {
             'handlers': ['console'],
-            'level': os.getenv('DJANGO_LOG_LEVEL', 'INFO'),
+            'level': log_level,
         },
     },
 }
