@@ -1,5 +1,4 @@
 import operator
-from csa.finance import transactions
 import csa.settings
 from csa.models.accounting import LedgerEntry, Account
 
