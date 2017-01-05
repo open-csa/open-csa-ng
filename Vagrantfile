@@ -84,6 +84,19 @@ Vagrant.configure("2") do |config|
     postgresql-9.4 \
     postgresql-server-dev-9.4
 
+  # drop database and user if they exist
+  sudo -u postgres dropdb --if-exists csa
+  sudo -u postgres dropuser --if-exists csa
+
+  # create user and database
+  sudo -u postgres psql -c "CREATE USER csa WITH PASSWORD 'p4ssw0rd';"
+  sudo -u postgres createdb \
+    --owner csa \
+    --encoding UTF8 \
+    --locale el_GR.utf8 \
+    --template template0 \
+  csa
+
   cd open-csa-ng
   CSA_ENVIRONMENT=development make clean
   CSA_ENVIRONMENT=development make
