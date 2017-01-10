@@ -1,4 +1,7 @@
+# need because of stupid https://github.com/django/django/commit/a3db480393d0065fc69834057f0e02a4afc65df9
+# git+https://github.com/django/django.git#egg=django
 django
+
 django-bootstrap3
 django-registration
 django-phonenumber-field

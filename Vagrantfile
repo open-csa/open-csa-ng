@@ -72,8 +72,6 @@ Vagrant.configure("2") do |config|
   sed -i /etc/locale.gen -e 's/# el_GR.UTF-8 UTF-8/el_GR.UTF-8 UTF-8/'
   dpkg-reconfigure -f noninteractive locales
   apt-get update
-  # sqlite3: we won't need this when we get a real DB
-  # git for local development
   apt-get install -y \
     python3 \
     virtualenv \
@@ -84,21 +82,19 @@ Vagrant.configure("2") do |config|
     postgresql-9.4 \
     postgresql-server-dev-9.4
 
-  # drop database and user if they exist
   sudo -u postgres dropdb --if-exists csa
   sudo -u postgres dropuser --if-exists csa
 
-  # create user and database
-  sudo -u postgres psql -c "CREATE USER csa WITH PASSWORD 'p4ssw0rd';"
+  # CREATEDB permission for the test database
+  sudo -u postgres psql -c "CREATE USER csa CREATEDB PASSWORD 'p4ssw0rd';"
   sudo -u postgres createdb \
     --owner csa \
     --encoding UTF8 \
     --locale el_GR.utf8 \
     --template template0 \
-  csa
+    csa
 
   cd open-csa-ng
-  CSA_ENVIRONMENT=development make clean
   CSA_ENVIRONMENT=development make
   SHELL
 end

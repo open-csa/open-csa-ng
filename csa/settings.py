@@ -73,6 +73,12 @@ if csa_env in ('development', 'test'):
             'PASSWORD': 'p4ssw0rd',
             'HOST': '127.0.0.1',
             'PORT': '5432',
+            'TEST': {
+                'CHARSET': 'UTF8',
+                # this option is not yet released.
+                # need to set template1 collation for now :/
+                'TEMPLATE': 'template0',
+            },
         }
 
 

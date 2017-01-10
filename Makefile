@@ -4,7 +4,7 @@ CSA_ENVIRONMENT ?= production
 export CSA_ENVIRONMENT
 
 # set LANG for variable localization (currency sign etc)
-LANG=el_GR.utf8
+LANG = el_GR.utf8
 export LANG
 
 .PHONY: deps print-info test db-reset pep8 autopep8
@@ -31,9 +31,6 @@ deps-no-venv: print-info
 venv:
 	virtualenv -p python3 venv --always-copy --prompt '(csa)'
 
-test:
-	. venv/bin/activate && python -m unittest -v ${TEST_ARGS}
-
 run-dev:
 	. venv/bin/activate && python ./manage.py runserver 0.0.0.0:8000
 
@@ -53,3 +50,7 @@ autopep8:
 
 clean:
 	rm -rf venv csa.egg-info
+
+test:
+	. venv/bin/activate && \
+		CSA_ENVIRONMENT=test python ./manage.py test csa.tests.functional
